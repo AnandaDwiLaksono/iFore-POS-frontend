@@ -20,7 +20,7 @@ function App() {
             <div className='fixed right-4 bottom-4' style={{ zIndex: '1000' }}>
               <TooltipComponent content='Theme Settings' position='TopCenter'>
                 <button
-                  type='button' 
+                  type='button'
                   className='text-2xl p-3 hover:drop-shadow-xl hover:bg-light-gray text-white' 
                   style={{ background: currentColor, borderRadius: '50%' }}
                   onClick={() => setThemeSettings(true)}
@@ -47,8 +47,8 @@ function App() {
 
               <Routes>
                 {/* Authentication */}
-                <Route path='/auth/register' element={<SignUp />} />
-                <Route path='/auth/login' element={<SignIn />} />
+                {/* <Route path='/auth/register' element={<SignUp />} />
+                <Route path='/auth/login' element={<SignIn />} /> */}
 
                 {/* Dashboard */}
                 <Route path='/' element={<Dashboard />} />
