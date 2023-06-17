@@ -33,7 +33,25 @@ const inventoryGrid = [
     { field: 'Category',
       width: '100',
       textAlign: 'Center',
-      editType: 'dropdownedit' // Bug: Can't add new category
+      editType: 'dropdownedit',
+      edit: {
+        params: {
+          dataSource: [
+            { Category: 'AIO' },
+            { Category: 'Coil' },
+            { Category: 'Baterai' },
+            { Category: 'Mod' },
+            { Category: 'RDA' },
+            { Category: 'Freebase' },
+            { Category: 'Salt' },
+            { Category: 'Liquid' },
+            { Category: 'Pod' },
+            { Category: 'Tank' },
+            { Category: 'Charger' },
+            { Category: 'Accesories' }
+          ]
+        }
+      }
     },
     {
       field: 'Purchase',
