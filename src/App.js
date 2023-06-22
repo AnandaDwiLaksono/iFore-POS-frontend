@@ -5,7 +5,7 @@ import { FiSettings } from 'react-icons/fi';
 import './App.css';
 import { Navbar, Profile, Sidebar, ThemeSettings} from './components';
 import { useStateContext } from './contexts/ContextProvider';
-import { Calendar, Dashboard, Inventory, Kanban, SignIn, SignUp, Transaction, TransactionHistory } from './pages';
+import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory } from './pages';
 
 function App() {
   const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } = useStateContext();

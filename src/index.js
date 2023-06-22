@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { registerLicense } from '@syncfusion/ej2-base';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import './index.css';
 import App from './App';
@@ -9,12 +10,16 @@ import { ContextProvider } from './contexts/ContextProvider';
 
 registerLicense('ORg4AjUWIQA/Gnt2VVhkQlFadVdJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkFjX39dcXNRT2ZcUEE=');
 
+const queryClient = new QueryClient();
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ContextProvider>
-      <App />
-    </ContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <ContextProvider>
+        <App />
+      </ContextProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
