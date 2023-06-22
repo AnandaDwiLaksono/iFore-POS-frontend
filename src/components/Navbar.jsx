@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { AiOutlineMenu } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 import { useStateContext } from '../contexts/ContextProvider';
-import Logo from '../assets/img/Logo_Unicloud.jpg';
-import { Link } from 'react-router-dom';
+import { API_URL } from '../config/apiConfig';
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title}
@@ -26,6 +28,8 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 const Navbar = () => {
   const { setActiveMenu, screenSize, setScreenSize, currentColor } = useStateContext();
 
+	const [user, setUser] = useState({});
+
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
 
@@ -44,6 +48,18 @@ const Navbar = () => {
     }
   }, [screenSize, setActiveMenu]);
   
+	useQuery({
+		queryKey: ["user"],
+		queryFn: async () => {
+			return await axios.get(`${API_URL}/api/users`);
+		},
+		onSuccess: (data) => {
+			setUser(data.data.data[0]);
+		},
+		onError: (error) => {
+			console.log(error);
+		},
+	});
 
   return (
     <div className='flex justify-between p-2 md:mx-6 relative'>
@@ -62,10 +78,12 @@ const Navbar = () => {
               // onClick={() => setIsClicked(true)}
             >
               <img className='rounded-full w-8 h-8 shadow-md'
-                src={Logo}
+                src={user.logo}
                 alt='avatar'
               />
-              <p className='text-gray-400 text-14 font-bold ml-1'>Unicloud</p>
+              <p className='text-gray-400 text-14 font-bold ml-1'>
+                {user.name}
+              </p>
               {/* <MdKeyboardArrowDown className='text-gray-400 text-14' /> */}
             </div>
           </TooltipComponent>
