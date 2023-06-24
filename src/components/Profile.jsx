@@ -214,7 +214,6 @@ const Profile = () => {
 								</div>
 							</div>
 							<label
-								for='name'
 								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
 							>
 								Store Name
@@ -222,7 +221,6 @@ const Profile = () => {
 							<div className='pt-1 px-4'>
 								<input
 									type='text'
-									name='name'
 									className='border-solid border-1 w-[50%]'
 									defaultValue={user.name}
 									onChange={(e) => {
@@ -231,7 +229,6 @@ const Profile = () => {
 								/>
 							</div>
 							<label
-								for='no'
 								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
 							>
 								Phone Number
@@ -239,7 +236,6 @@ const Profile = () => {
 							<div className='pt-1 px-4'>
 									<input
 										type='text'
-										name='no'
 										className='border-solid border-1 w-[50%]'
 										defaultValue={user.phone_number}
 										onChange={(e) => {
@@ -248,7 +244,6 @@ const Profile = () => {
 									/>
 							</div>
 							<label
-								for='email'
 								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
 							>
 								Email
@@ -256,7 +251,6 @@ const Profile = () => {
 							<div className='pt-1 px-4'>
 								<input
 									type='text'
-									name='email'
 									className='border-solid border-1 w-[50%]'
 									defaultValue={user.email}
 									onChange={(e) => {
@@ -339,7 +333,6 @@ const Profile = () => {
 								</h6>
 							</div>
 							<label
-								for='email'
 								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
 							>
 								Items Category
@@ -347,14 +340,12 @@ const Profile = () => {
 							<div className='pt-1 px-4'>
 								<input
 									type='text'
-									name='email'
 									className='border-solid border-1 w-[50%]'
 									defaultValue={categories.map(category => category.name).join(', ')}
 									onChange={handleChangeCategory}
 								/>
 							</div>
 							<label
-								for='email'
 								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
 							>
 								Payment Method
@@ -362,7 +353,6 @@ const Profile = () => {
 							<div className='pt-1 px-4 pb-6'>
 								<input
 									type='text'
-									name='email'
 									className='border-solid border-1 w-[50%]'
 									defaultValue={payments.map(payment => payment.name).join(', ')}
 									onChange={handleChangePayment}
