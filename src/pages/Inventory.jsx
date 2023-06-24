@@ -95,9 +95,7 @@ const Inventory = () => {
       return axios.get(`${API_URL}/api/categories`);
     },
     onSuccess: (data) => {
-      setCategories(data.data.data.map(item => ({
-        name: item.name
-      })));
+      setCategories(data.data.data);
     },
     onError: (error) => {
       console.log("error");
@@ -111,11 +109,50 @@ const Inventory = () => {
     }
   });
 
-  // const addInventory = useMutation({
-  //   mutationFn: (newInventory) => {
-  //     return axios.post(`${API_URL}/api/inventories`, newInventory);
-  //   },
-  // });
+  const addInventory = useMutation({
+    mutationFn: (newDataInventory) => {
+      return axios.post(`${API_URL}/api/inventories`, newDataInventory);
+    },
+  });
+
+  const editInventory = useMutation({
+    mutationFn: (newDataInventory) => {
+      return axios.put(`${API_URL}/api/inventories/${newDataInventory.id}`, newDataInventory);
+    },
+  });
+
+  const deleteInventory = useMutation({
+    mutationFn: (idInventory) => {
+      return axios.delete(`${API_URL}/api/inventories/${idInventory}`);
+    },
+  });
+
+  const handleAddInventory = (newInventory) => {
+    const data = {
+      name: newInventory.name,
+      category_id: categories.find(item => item.name === newInventory.category.name).id,
+      purchase_price: newInventory.purchase_price,
+      selling_price: newInventory.selling_price,
+      qty_stock: newInventory.qty_stock,
+      note: newInventory.note === undefined ? '' : newInventory.note
+    };
+
+    addInventory.mutate(data);
+  };
+
+  const handleEditInventory = (newInventory) => {
+    const data = {
+      id: newInventory.id,
+      name: newInventory.name,
+      category_id: categories.find(item => item.name === newInventory.category.name).id,
+      purchase_price: newInventory.purchase_price,
+      selling_price: newInventory.selling_price,
+      qty_stock: newInventory.qty_stock,
+      note: newInventory.note === undefined ? '' : newInventory.note
+    };
+
+    editInventory.mutate(data);
+  };
   
   if (!fetchInventories.isLoading) {
     const inventories = fetchInventories.data.data.data.sort((a, b) => a.name.localeCompare(b.name));
@@ -148,6 +185,23 @@ const Inventory = () => {
             pageCount: 4,
             pageSizes: true
           }}
+          actionComplete={(args) => {
+            if (args.requestType === 'save') {
+              if (args.action === 'add') {
+                handleAddInventory(args.data);
+              }
+
+              if (args.action === 'edit') {
+                handleEditInventory(args.data);
+              }
+            }
+
+            if (args.requestType === 'delete') {
+              args.data.forEach((item) => {
+                deleteInventory.mutate(item.id);
+              });    
+            }
+          }}
         >
           <ColumnsDirective>
             {inventoryGrid.map((item, index) => (
@@ -156,17 +210,6 @@ const Inventory = () => {
           </ColumnsDirective>
           <Inject
             services={[Sort, Filter, Page, Edit, Selection, Search, Toolbar, Reorder, Group, ColumnMenu, Resize]}
-            toolbarClick={(args) => {
-              console.log(args.item.id)
-              if (args.item.id === 'gridcomp_add') {
-                console.log('add')
-              } else if (args.item.id === 'gridcomp_edit') {
-                console.log('edit')
-              } else if (args.item.id === 'gridcomp_delete') {
-                console.log('delete')
-              }
-
-            }}
           />
         </GridComponent>
       </div>
