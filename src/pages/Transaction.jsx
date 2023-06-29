@@ -1,263 +1,102 @@
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import React from 'react';
+import React, { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { HiSearch } from 'react-icons/hi';
 import { MdCancel } from 'react-icons/md';
 import { BsCash, BsCreditCard } from 'react-icons/bs';
 import { AiOutlineQrcode } from 'react-icons/ai';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import { AddOrderList } from '../components';
-
-const inventoryData = [
-  {
-      ItemID: 123456,
-      Name: 'Oxva Velocity',
-      Category: 'AIO',
-      Purchase: 400000,
-      Selling: 500000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123457,
-      Name: 'Oxva Unipro Coil',
-      Category: 'Coil',
-      Purchase: 25000,
-      Selling: 45000,
-      QtyStock: 20,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  },
-  {
-      ItemID: 123458,
-      Name: 'Baterai VTC6 18650',
-      Category: 'Baterai',
-      Purchase: 80000,
-      Selling: 100000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123459,
-      Name: 'Hotcig R233',
-      Category: 'Mod',
-      Purchase: 400000,
-      Selling: 500000,
-      QtyStock: 5,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  },
-  {
-      ItemID: 123460,
-      Name: 'RDA Nitrous',
-      Category: 'RDA',
-      Purchase: 280000,
-      Selling: 330000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123461,
-      Name: 'Max Coil',
-      Category: 'Coil',
-      Purchase: 25000,
-      Selling: 35000,
-      QtyStock: 15,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  },
-  {
-      ItemID: 123462,
-      Name: 'B1 Coil',
-      Category: 'Coil',
-      Purchase: 45000,
-      Selling: 65000,
-      QtyStock: 15,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123463,
-      Name: 'Secret Tiramisu Nic 3',
-      Category: 'Freebase',
-      Purchase: 120000,
-      Selling: 140000,
-      QtyStock: 5,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  },
-  {
-      ItemID: 123464,
-      Name: 'Blondies Bread Butter Buns Nic 3',
-      Category: 'Freebase',
-      Purchase: 120000,
-      Selling: 140000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123465,
-      Name: 'Secret Tiramisu Nic 6',
-      Category: 'Freebase',
-      Purchase: 120000,
-      Selling: 140000,
-      QtyStock: 5,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  },
-  {
-      ItemID: 123466,
-      Name: 'Blondies Bread Butter Buns Nic 6',
-      Category: 'Freebase',
-      Purchase: 120000,
-      Selling: 140000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123467,
-      Name: 'A La Carte Cream Caramel Nic 6 60 ml',
-      Category: 'Freebase',
-      Purchase: 120000,
-      Selling: 140000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123468,
-      Name: 'Caliburn AK2',
-      Category: 'POD',
-      Purchase: 200000,
-      Selling: 150000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: 'Warna pink tinggal 1, warna oren ada 3, warna hitam tinggal 1'
-  },
-  {
-      ItemID: 123469,
-      Name: 'Dotpod Nano by Dotmod',
-      Category: 'POD',
-      Purchase: 320000,
-      Selling: 300000,
-      QtyStock: 5,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  },
-  {
-      ItemID: 123470,
-      Name: 'Catridge Dotpod',
-      Category: 'Coil',
-      Purchase: 45000,
-      Selling: 50000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123471,
-      Name: 'Ketan Jinak 60 ml',
-      Category: 'Freebase',
-      Purchase: 100000,
-      Selling: 110000,
-      QtyStock: 5,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  },
-  {
-      ItemID: 123472,
-      Name: 'Foom Bacco Series 30 ml',
-      Category: 'Saltnic',
-      Purchase: 100000,
-      Selling: 110000,
-      QtyStock: 5,
-      InventoryImage: null,
-      Note: ''
-  },
-  {
-      ItemID: 123473,
-      Name: 'Secret Banana 60 ml',
-      Category: 'Freebase',
-      Purchase: 1200000,
-      Selling: 140000,
-      QtyStock: 5,
-      InventoryImage:
-      'https://cdn.shopclues.com/images1/thumbnails/104158/320/320/148648730-104158193-1592481791.jpg',
-      Note: ''
-  }
-];
-
-inventoryData.sort((a, b) => a.Name.localeCompare(b.Name));
-
-const orderData = {
-  OrderItems: [
-    {
-      ItemID: 123467,
-      Name: 'A La Carte Cream Caramel Nic 6 60 ml',
-      Category: 'Freebase',
-      Price: 140000,
-      Quantity: 1,
-      Discount: 10000,
-      Total: 140000
-    },
-    {
-      ItemID: 123472,
-      Name: 'Foom Bacco Series 30 ml',
-      Category: 'Saltnic',
-      Price: 110000,
-      Quantity: 1,
-      Discount: 0,
-      Total: 110000
-    },
-    {
-      ItemID: 123471,
-      Name: 'Ketan Jinak 60 ml',
-      Category: 'Freebase',
-      Price: 110000,
-      Quantity: 1,
-      Discount: 0,
-      Total: 110000
-    },
-    {
-      ItemID: 123470,
-      Name: 'Catridge Dotpod',
-      Category: 'Coil',
-      Price: 50000,
-      Quantity: 2,
-      Discount: 0,
-      Total: 100000
-    },
-    {
-      ItemID: 123473,
-      Name: 'Secret Banana 60 ml',
-      Category: 'Freebase',
-      Price: 140000,
-      Quantity: 1,
-      Discount: 10000,
-      Total: 140000
-    }
-  ],
-  PaymentType: 'Cash',
-  SubTotal: 600000,
-  TotalDiscount: 20000,
-  TotalAmount: 580000
-};
+import { API_URL } from '../config/apiConfig';
 
 const Transaction = () => {
-  const { addOrderList, setAddOrderList, itemData, setItemData, numberFormat, currentColor } = useStateContext();
+  const { addOrderList, setAddOrderList, itemData, setItemData, numberFormat, currentColor, setOnOrder } = useStateContext();
+
+  const [inventories, setInventories] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [orderList, setOrderList] = useState([]);
+  const [paymentType, setPaymentType] = useState('Cash');
+
+  const subTotal = orderList.reduce((acc, curr) => acc + curr.total, 0);
+  const totalDiscount = orderList.reduce((acc, curr) => acc + curr.discount, 0);
+  
+  useQuery({
+    queryKey: ['inventory'],
+    queryFn: () => {
+      return axios.get(`${API_URL}/api/inventories`);
+    },
+    onSuccess: (res) => {
+      const data = res.data.data;
+      data.sort((a, b) => a.name.localeCompare(b.name));
+      
+      setInventories(data);
+    }
+  });
+
+  const deleteOrder = useMutation({
+    mutationFn: (item) => {
+      return axios.delete(`${API_URL}/api/order_items/${item}`);
+    }
+  });
+  
+  const addTransaction = useMutation({
+    mutationFn: (data) => {
+      return axios.post(`${API_URL}/api/transaction_histories`, data);
+    }
+  });
+  
+  const handleGetOrder = (item) => {
+    axios.get(`${API_URL}/api/order_items/${item.id}`)
+      .then((res) => {
+        if (res.data.data.qty === 0) {
+          deleteOrder.mutate(res.data.data.id);
+          orderList.splice(orderList.indexOf(item), 1);
+        } else {
+          for (let i = 0; i < orderList.length; i++) {
+            if (orderList[i].id === res.data.data.id) {
+              orderList.splice(i, 1);
+            }
+          }
+
+          setOrderList([...orderList, res.data.data]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      }
+    );
+  };
+
+  const handleDeleteOrder = () => {
+    orderList.forEach((item) => {
+      deleteOrder.mutate(item.id);
+    });
+
+    setOrderList([]);
+  }
+
+  const handleAddTransaction = () => {
+    const data = {
+      payment_type: paymentType,
+      order_items_id: orderList.map((item) => item.id),
+      status: 'completed',
+      subtotal: subTotal,
+      total_discount: totalDiscount,
+      total: subTotal - totalDiscount,
+      total_profit: orderList.reduce((acc, curr) => acc + curr.profit, 0),
+      note: ''
+    };
+
+    addTransaction.mutate(data, {
+      onSuccess: (res) => {
+        setOrderList([]);
+        console.log(res);
+      }
+    });
+  };
 
   return (
     <div className='flex flex-row mx-11 mb-3'>
@@ -272,40 +111,33 @@ const Transaction = () => {
             <input 
               placeholder='Type here...'
               className='h-5 text-current border-0 box-content bg-none m-0 block min-w-0 w-full p-0 focus:outline-0 bg-transparent'
+              onChange={(e) => {setSearchValue(e.target.value)}}
             />
           </div>
         </div>
         <div className='flex mt-3 flex-wrap gap-3 items-center'>
-          {inventoryData.map((item) => (
+          {inventories.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase())).map((item) => (
             <button
-              key={item.ItemID}
+              key={item.id}
               className='bg-white dark:bg-secondary-dark-bg shadow rounded-lg w-36 h-[216px] hover:drop-shadow-xl'
               onClick={() => {setAddOrderList(true); setItemData(item)}}
             >
-              {item.InventoryImage === null ? (
-                <div 
-                  className='text-6xl w-36 h-28 font-medium rounded-t-lg text-white text-center py-6'
-                  style={{backgroundColor: currentColor}}
-                >
-                  {item.Name.split(' ').slice(0,2).map(word => word.charAt(0))}
-                </div>
-              ) : (
-                <img
-                  className='w-36 h-28 rounded-t-lg'
-                  src={item.InventoryImage}
-                  alt={item.Name}
-                />
-              )}
+              <div 
+                className='text-6xl w-36 h-28 font-medium rounded-t-lg text-white text-center py-6'
+                style={{backgroundColor: currentColor}}
+              >
+                {item.name.split(' ').slice(0,2).map(word => word.charAt(0))}
+              </div>
               <div className='flex flex-col justify-between h-[104px] text-[#344767] dark:text-gray-200'>
                 <div className='mx-2 mt-2 text-center text-sm font-medium'>
-                  {item.Name}
+                  {item.name}
                 </div>
                 <div className='flex mb-2 align-text-bottom'>
                   <div className='text-left basis-1/4 ml-2 text-sm'>
-                    {item.QtyStock}
+                    {item.qty_stock}
                   </div>
                   <div className='text-right w-full font-semibold text-sm mr-2 basis-3/4'>
-                    Rp {numberFormat.format(item.Selling)}
+                    Rp {numberFormat.format(item.selling_price)}
                   </div>
                 </div>
               </div>
@@ -323,7 +155,7 @@ const Transaction = () => {
               <button
                 type='button' 
                 className='text-2xl hover:drop-shadow-xl text-red-400 hover:text-red-300' 
-                onClick={() => {}}
+                onClick={handleDeleteOrder}
               >
                 <MdCancel />
               </button>
@@ -338,27 +170,27 @@ const Transaction = () => {
             Price
           </div>
         </div>
-        {orderData?.OrderItems?.map((item) => (
+        {orderList?.map((item) => (
           <div
-            key={item.ItemID}
+            key={item.id}
             className='flex flex-row justify-between px-3 py-2 border-b border-gray-200'
           >
             <div className='text-left text-sm basis-1/12'>
-              1 x
+              {item.qty} x
             </div>
             <div className='text-left text-sm basis-5/12'>
-              {item.Name}
-              {(item.Discount > 0) && (
+              {item.inventory.name}
+              {(item.discount > 0) && (
                 <div className='text-xs text-right text-red-400'>
                   Discount
                 </div>
               )}
             </div>
             <div className='text-right text-sm basis-5/12'>
-              Rp {numberFormat.format(item.Price)}
-              {(item.Discount > 0) && (
+              Rp {numberFormat.format(item.total)}
+              {(item.discount > 0) && (
                 <div className='text-xs text-red-400'> 
-                  Rp {numberFormat.format(item.Discount)}
+                  Rp {numberFormat.format(item.discount)}
                 </div>
               )}
             </div>
@@ -368,7 +200,20 @@ const Transaction = () => {
                   className='hover:text-gray-400 text-base'
                   onClick={() => {
                     setAddOrderList(true);
-                    setItemData(inventoryData.find(data => data.ItemID === item.ItemID))
+                    setItemData({
+                      id: item.id,
+                      item_id: item.item_id,
+                      qty: item.qty,
+                      total: item.total,
+                      discount: item.discount,
+                      profit: item.profit,
+                      name: item.inventory.name,
+                      selling_price: item.inventory.selling_price,
+                      qty_stock: item.inventory.qty_stock,
+                      category: item.inventory.category,
+                      purchase_price: item.inventory.purchase_price,
+                    });
+                    setOnOrder(true);
                   }}
                 >
                   <FiEdit />
@@ -382,7 +227,7 @@ const Transaction = () => {
             Subtotal
           </div>
           <div className='text-right font-semibold w-full sm:w-5/12'>
-            Rp {numberFormat.format(orderData.SubTotal)}
+            Rp {numberFormat.format(subTotal)}
           </div>
         </div>
         <div className='flex flex-row px-3 py-2 border-b border-gray-200 flex-wrap'>
@@ -390,7 +235,7 @@ const Transaction = () => {
             Total Discount
           </div>
           <div className='text-right font-semibold w-full sm:w-5/12'>
-            Rp {numberFormat.format(orderData.TotalDiscount)}
+            Rp {numberFormat.format(totalDiscount)}
           </div>
         </div>
         <div className='flex flex-row px-3 py-2 mt-4 flex-wrap'>
@@ -399,32 +244,47 @@ const Transaction = () => {
           </div>
           <div className='flex justify-center items-center w-full sm:w-2/12'>
             <TooltipComponent content='Cash' position='BottomCenter'>
-              <button className='hover:drop-shadow-xl hover:bg-[#03C9D7] hover:text-white focus:bg-[#03C9D7] focus:text-white text-2xl rounded-md focus:drop-shadow-xl px-4 w-full align-middle'>
+              <button
+                className={`hover:drop-shadow-xl hover:bg-[#03C9D7] hover:text-white focus:bg-[#03C9D7] focus:text-white text-2xl rounded-md focus:drop-shadow-xl px-4 w-full align-middle ${paymentType === 'Cash' ? 'bg-[#03C9D7] text-white' : ''}`}
+                onClick={() => setPaymentType('Cash')}
+                disabled={paymentType === 'Cash'}
+              >
                 <BsCash />
               </button>
             </TooltipComponent>
           </div>
           <div className='flex justify-center items-center w-full sm:w-2/12'>
-            <TooltipComponent content='Debit / Transfer' position='BottomCenter'>
-              <button className='hover:drop-shadow-xl hover:bg-[#03C9D7] hover:text-white focus:bg-[#03C9D7] focus:text-white text-2xl rounded-md focus:drop-shadow-xl px-4 w-full align-middle'>
+            <TooltipComponent content='BCA' position='BottomCenter'>
+              <button
+                className={`hover:drop-shadow-xl hover:bg-[#03C9D7] hover:text-white focus:bg-[#03C9D7] focus:text-white text-2xl rounded-md focus:drop-shadow-xl px-4 w-full align-middle ${paymentType === 'BCA' ? 'bg-[#03C9D7] text-white' : ''}`}
+                onClick={() => setPaymentType('BCA')}
+                disabled={paymentType === 'BCA'}
+              >
                 <BsCreditCard />
               </button>
             </TooltipComponent>
           </div>
           <div className='flex justify-center items-center w-full sm:w-2/12'>
             <TooltipComponent content='QRIS' position='BottomCenter'>
-              <button className='hover:drop-shadow-xl hover:bg-[#03C9D7] hover:text-white focus:bg-[#03C9D7] focus:text-white text-2xl rounded-md focus:drop-shadow-xl px-4 w-full align-middle'>
+              <button
+                className={`hover:drop-shadow-xl hover:bg-[#03C9D7] hover:text-white focus:bg-[#03C9D7] focus:text-white text-2xl rounded-md focus:drop-shadow-xl px-4 w-full align-middle ${paymentType === 'QRIS' ? 'bg-[#03C9D7] text-white' : ''}`}
+                onClick={() => setPaymentType('QRIS')}
+                disabled={paymentType === 'QRIS'}
+              >
                 <AiOutlineQrcode />
               </button>
             </TooltipComponent>
           </div>
         </div>
-        <button className='bg-green-500 text-white text-center text-xl font-bold py-3 rounded-b-lg w-full hover:bg-green-400 mt-4'>
-          Rp {numberFormat.format(orderData.TotalAmount)}
+        <button
+          className='bg-green-500 text-white text-center text-xl font-bold py-3 rounded-b-lg w-full hover:bg-green-400 mt-4'
+          onClick={handleAddTransaction}
+        >
+          Rp {numberFormat.format(subTotal - totalDiscount)}
         </button>
       </div>
 
-      {addOrderList && <AddOrderList dataItem={itemData} />}
+      {addOrderList && <AddOrderList dataItem={itemData} dataOrder={handleGetOrder}/>}
     </div>
   )
 };
