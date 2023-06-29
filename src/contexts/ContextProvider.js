@@ -19,6 +19,8 @@ export const ContextProvider = ({ children }) => {
     const [addOrderList, setAddOrderList] = useState(false);
     const [itemData, setItemData] = useState(null);
     const [icon, setIcon] = useState(true);
+    const orderId = [];
+    const [onOrder, setOnOrder] = useState(false);
 
     const handleClick = (clicked) => {
         setIsClicked({ ...initialState, [clicked]: true });
@@ -71,7 +73,10 @@ export const ContextProvider = ({ children }) => {
             currencyFormat,
             icon,
             setIcon,
-            numberFormat
+            numberFormat,
+            orderId,
+            setOnOrder,
+            onOrder
         }}>
             {children}
         </StateContext.Provider>
