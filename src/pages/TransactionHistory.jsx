@@ -1,9 +1,14 @@
 import React from 'react';
 import { ColumnDirective, ColumnMenu, ColumnsDirective, DetailRow, Edit, Filter, GridComponent, Inject, Page, Reorder, Resize, Search, Selection, Sort, Toolbar } from '@syncfusion/ej2-react-grids';
+import { DataManager } from '@syncfusion/ej2-data';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 import { Header } from '../components';
+import { API_URL } from '../config/apiConfig';
 
 const gridOrderItems = (props) => (
+
   <div>
     {props.OrderItems.map((item) => (
       <div key={item.ItemID}>
@@ -176,6 +181,15 @@ const transactionData = [
         Quantity: 1,
         Discount: 0,
         Total: 110000
+      },
+      {
+        ItemID: 123467,
+        Name: 'A La Carte Cream Caramel Nic 6 60 ml',
+        Category: 'Freebase',
+        Price: 140000,
+        Quantity: 1,
+        Discount: 0,
+        Total: 140000
       }
     ],
     PaymentType: 'BCA',
@@ -298,41 +312,53 @@ const childGrid = {
 };
 
 const TransactionHistory = () => {
-  return (
-    <div className='m-2 md:m-10 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
-      <Header category='Page' title='Transaction History' />
-      <GridComponent id='gridcomp'
-        dataSource={transactionData}
-        childGrid={childGrid}
-        allowPaging
-        allowSorting
-        allowFiltering
-        allowReordering
-        showColumnMenu
-        allowTextWrap
-        enableStickyHeader
-        toolbar={['Search', 'Edit', 'Delete']}
-        editSettings={{
-          allowDeleting: true,
-          allowEditing: true,
-          mode: 'Dialog'
-        }}
-        filterSettings={{ type: 'Menu' }}
-        width='auto'
-        pageSettings={{
-          pageCount: 4,
-          pageSizes: true
-        }}
-      >
-        <ColumnsDirective>
-          {transactionGrid.map((item, index) => (
-            <ColumnDirective key={index} {...item} />
-          ))}
-        </ColumnsDirective>
-        <Inject services={[Sort, Filter, Page, Edit, Selection, Search, Toolbar, Reorder, ColumnMenu, Resize, DetailRow]} />
-      </GridComponent>
-    </div>
-  );
+  const fetchDataTransaction = useQuery({
+    queryKey: ['transaction'],
+    queryFn: () => {
+      return axios.get(`${API_URL}/api/transaction_histories`);
+    },
+  });
+
+  if (!fetchDataTransaction.isLoading) {
+    // const transactionData = new DataManager(fetchDataTransaction.data.data.data);
+    console.log(fetchDataTransaction.data.data.data);
+
+    return (
+      <div className='m-2 md:m-10 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
+        <Header category='Page' title='Transaction History' />
+        <GridComponent id='gridcomp'
+          dataSource={transactionData}
+          childGrid={childGrid}
+          allowPaging
+          allowSorting
+          allowFiltering
+          allowReordering
+          showColumnMenu
+          allowTextWrap
+          enableStickyHeader
+          toolbar={['Search', 'Edit', 'Delete']}
+          editSettings={{
+            allowDeleting: true,
+            allowEditing: true,
+            mode: 'Dialog'
+          }}
+          filterSettings={{ type: 'Menu' }}
+          width='auto'
+          pageSettings={{
+            pageCount: 4,
+            pageSizes: true
+          }}
+        >
+          <ColumnsDirective>
+            {transactionGrid.map((item, index) => (
+              <ColumnDirective key={index} {...item} />
+            ))}
+          </ColumnsDirective>
+          <Inject services={[Sort, Filter, Page, Edit, Selection, Search, Toolbar, Reorder, ColumnMenu, Resize, DetailRow]} />
+        </GridComponent>
+      </div>
+    );
+  }
 };
 
 export default TransactionHistory;
