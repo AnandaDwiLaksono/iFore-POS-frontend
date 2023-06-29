@@ -93,7 +93,6 @@ const Transaction = () => {
     addTransaction.mutate(data, {
       onSuccess: (res) => {
         setOrderList([]);
-        console.log(res);
       }
     });
   };
