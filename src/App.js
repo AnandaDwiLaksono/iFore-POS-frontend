@@ -3,9 +3,9 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiSettings } from 'react-icons/fi';
 
 import './App.css';
-import { Navbar, Profile, Sidebar, ThemeSettings} from './components';
+import { Navbar, Sidebar, ThemeSettings} from './components';
 import { useStateContext } from './contexts/ContextProvider';
-import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory } from './pages';
+import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory, Profile } from './pages';
 
 function App() {
   const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } = useStateContext();

@@ -5,7 +5,7 @@ import { BiCategory } from 'react-icons/bi';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 
 import { useStateContext } from '../contexts/ContextProvider';
-import { CategoryPie, ForecastingChart, IncomeProfit } from '../components';
+import { Card, CategoryPie, ForecastingChart, IncomeProfit } from '../components';
 
 const Dashboard = () => {
   const { numberFormat } = useStateContext();
@@ -61,91 +61,10 @@ const Dashboard = () => {
         </div>
       </div>
       <div className='box-border flex flex-wrap -mt-6 -ml-6 w-[calc(100%+24px)]'>
-        <div className='pl-6 pt-6 basis-full max-w-full sm:basis-1/2 sm:max-w-[50%] lg:basis-1/4 lg:max-w-[25%]'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4 flex w-full items-center'>
-              <div className='w-2/3'>
-                <p className='text-sm font-bold text-[#67748e] dark:text-gray-300'>
-                  Transaction
-                </p>
-                <span className='text-[#344767] text-xl font-bold dark:text-white'>
-                  {numberFormat.format(23)}
-                </span>
-                <span className='text-[#ea0606] text-sm font-bold ml-1'>
-                  -2%
-                </span>
-              </div>
-              <div className='w-1/3'>
-                <div className='w-12 h-12 flex justify-center items-center bg-[#03C9D7] ml-auto rounded-lg text-white shadow-md text-xl'>
-                  <IoCartSharp />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 basis-full max-w-full sm:basis-1/2 sm:max-w-[50%] lg:basis-1/4 lg:max-w-[25%]'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4 flex w-full items-center'>
-              <div className='w-2/3'>
-                <p className='text-sm font-bold text-[#67748e] dark:text-gray-300'>
-                  Income
-                </p>
-                <span className='text-[#344767] text-xl font-bold dark:text-white '>
-                  Rp{numberFormat.format(1034300)}
-                </span>
-                <span className='text-[#82d616] text-sm font-bold ml-1'>
-                  +3%
-                </span>
-              </div>
-              <div className='w-1/3'>
-                <div className='w-12 h-12 flex justify-center items-center bg-[#03C9D7] ml-auto rounded-lg text-white shadow-md text-xl'>
-                  <FaMoneyBillWaveAlt />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 basis-full max-w-full sm:basis-1/2 sm:max-w-[50%] lg:basis-1/4 lg:max-w-[25%]'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4 flex w-full items-center'>
-              <div className='w-2/3'>
-                <p className='text-sm font-bold text-[#67748e] dark:text-gray-300'>
-                  Profit
-                </p>
-                <span className='text-[#344767] text-xl font-bold dark:text-white'>
-                  Rp{numberFormat.format(530000)}
-                </span>
-                <span className='text-[#82d616] text-sm font-bold ml-1'>
-                  +5%
-                </span>
-              </div>
-              <div className='w-1/3'>
-                <div className='w-12 h-12 flex justify-center items-center bg-[#03C9D7] ml-auto rounded-lg text-white shadow-md text-xl'>
-                  <FaWallet />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 basis-full max-w-full sm:basis-1/2 sm:max-w-[50%] lg:basis-1/4 lg:max-w-[25%]'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4 flex w-full items-center'>
-              <div className='w-2/3'>
-                <p className='text-sm font-bold text-[#67748e] dark:text-gray-300'>
-                  Best Selling Category
-                </p>
-                <span className='text-[#344767] text-xl font-bold dark:text-white'>
-                  Saltnic
-                </span>
-              </div>
-              <div className='w-1/3'>
-                <div className='w-12 h-12 flex justify-center items-center bg-[#03C9D7] ml-auto rounded-lg text-white shadow-md text-xl'>
-                  <BiCategory />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Card title='Transaction' value={numberFormat.format(23)} percentage='-2%' icon={<IoCartSharp />} />
+        <Card title='Income' value={`Rp${numberFormat.format(1034300)}`} percentage='+3%' icon={<FaMoneyBillWaveAlt />} />
+        <Card title='Profit' value={`Rp${numberFormat.format(530000)}`} percentage='+5%' icon={<FaWallet />} />
+        <Card title='Best Selling Category' value='Saltnic' icon={<BiCategory />} />
       </div>
       <div className='flex flex-wrap -ml-6 -mt-6 w-[calc(100%+24px)]'>
         <div className='pl-6 pt-6 w-full lg:w-3/5'>
@@ -186,90 +105,13 @@ const Dashboard = () => {
         </div>
       </div>
       <div className='flex flex-wrap -ml-6 -mt-6 w-[calc(100%+24px)] justify-center'>
-        <div className='pl-6 pt-6 w-full lg:w-1/2'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4'>
-              <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                Income
-              </div>
-              <div className='w-full'>
-                <ForecastingChart id='income-chart' data={incomeData} label='RP {value}' title='Income (in Thousand)' />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 w-full lg:w-1/2'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4'>
-              <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                Freebase
-              </div>
-              <div className='w-full'>
-                <ForecastingChart id='freebas-chart' data={categoryData} label='{value}' />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 w-full lg:w-1/2'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4'>
-              <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                Saltnic
-              </div>
-              <div className='w-full'>
-                <ForecastingChart id='saltnic-chart' data={categoryData} label='{value}' />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 w-full lg:w-1/2'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4'>
-              <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                Pod
-              </div>
-              <div className='w-full'>
-                <ForecastingChart id='pod-chart' data={categoryData} label='{value}' />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 w-full lg:w-1/2'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4'>
-              <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                Mod
-              </div>
-              <div className='w-full'>
-                <ForecastingChart id='mod-chart' data={categoryData} label='{value}' />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 w-full lg:w-1/2'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4'>
-              <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                Coil
-              </div>
-              <div className='w-full'>
-                <ForecastingChart id='coil-chart' data={categoryData} label='{value}' />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='pl-6 pt-6 w-full lg:w-1/2'>
-          <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
-            <div className='p-4'>
-              <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                Accessories
-              </div>
-              <div className='w-full'>
-                <ForecastingChart id='accessories-chart' data={categoryData} label='{value}' />
-              </div>
-            </div>
-          </div>
-        </div>
+        <ForecastingChart id='income-chart' data={incomeData} label='RP {value}' title='Income (in Thousand)' header='Income' />
+        <ForecastingChart id='freebase-chart' data={categoryData} label='{value}' header='Freebase' />
+        <ForecastingChart id='saltnic-chart' data={categoryData} label='{value}' header='Saltnic' />
+        <ForecastingChart id='pod-chart' data={categoryData} label='{value}' header='Pod' />
+        <ForecastingChart id='mod-chart' data={categoryData} label='{value}' header='Mod' />
+        <ForecastingChart id='coil-chart' data={categoryData} label='{value}' header='Coil' />
+        <ForecastingChart id='accessories-chart' data={categoryData} label='{value}' header='Accessories' />
       </div>
     </div>
   );

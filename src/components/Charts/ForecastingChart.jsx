@@ -2,7 +2,7 @@ import { ChartComponent, DateTime, Highlight, Inject, LineSeries, SeriesCollecti
 import React from 'react'
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const ForecastingChart = ({ id, data, label, interval, title }) => {
+const ForecastingChart = ({ id, data, label, interval, title, header }) => {
   const { currentMode } = useStateContext();
 
   const linePrimaryXAxis = {
@@ -51,21 +51,32 @@ const ForecastingChart = ({ id, data, label, interval, title }) => {
   ];
   
   return (
-    <ChartComponent
-      id={id}
-      primaryXAxis={linePrimaryXAxis}
-      primaryYAxis={linePrimaryYAxis}
-      width="100%"
-      height="324px"
-      chartArea={{ border: { width: 0 } }}
-      tooltip={{ enable: true, shared: true }}
-      legendSettings={{ enableHighlight: true}}
-    >
-      <Inject services={[LineSeries, DateTime, Tooltip, Highlight]} />
-      <SeriesCollectionDirective>
-        {lineCustomSeries.map((item, index) => <SeriesDirective key={index} {...item} />)}
-      </SeriesCollectionDirective>
-    </ChartComponent>
+    <div className='pl-6 pt-6 w-full lg:w-1/2'>
+      <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
+        <div className='p-4'>
+          <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
+            {header}
+          </div>
+          <div className='w-full'>
+            <ChartComponent
+              id={id}
+              primaryXAxis={linePrimaryXAxis}
+              primaryYAxis={linePrimaryYAxis}
+              width="100%"
+              height="324px"
+              chartArea={{ border: { width: 0 } }}
+              tooltip={{ enable: true, shared: true }}
+              legendSettings={{ enableHighlight: true}}
+            >
+              <Inject services={[LineSeries, DateTime, Tooltip, Highlight]} />
+              <SeriesCollectionDirective>
+                {lineCustomSeries.map((item, index) => <SeriesDirective key={index} {...item} />)}
+              </SeriesCollectionDirective>
+            </ChartComponent>
+          </div>  
+        </div>
+      </div>
+    </div>
   );
 };
 

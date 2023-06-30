@@ -161,7 +161,7 @@ const Profile = () => {
 	return (
 		<div className='p-6 relative'>
 			<div className='flex items-center min-h-[18.75rem] bg-center bg-cover bg-profile rounded-2xl overflow-hidden'></div>
-			<div className='text-black text-opacity-[0.87] transition-shadow duration-300 delay-[0ms] overflow-hidden flex flex-col min-w-0 break-words bg-clip-border border-0 rounded-2xl backdrop-saturate-200 backdrop-blur-[30px] bg-white bg-opacity-80 shadow-md -mt-[64px] mx-6 p-4'>
+			<div className='text-black text-opacity-[0.87] transition-shadow duration-300 delay-[0ms] overflow-hidden flex flex-col min-w-0 break-words bg-clip-border border-0 rounded-2xl backdrop-saturate-200 backdrop-blur-[30px] bg-white bg-opacity-80 shadow-md -mt-[64px] mx-6 p-4 dark:bg-secondary-dark-bg'>
 				<div className='box-border flex flex-row flex-wrap items-center'>
 					<div className='justify-center leading-[1] select-none transition-all duration-200 ease-in-out delay-[0ms] rounded-xl font-bold shadow w-[4.625rem] h-[4.625rem] text-base'>
 						<img 
@@ -170,11 +170,11 @@ const Profile = () => {
 							alt='photo_profile'
 						/>
 					</div>
-					<div className='h-full leading-[1] pl-6 text-[#344767]'>
-						<h5 className='text-xl leading-snug tracking-normal font-medium text-[#344767]'>
-							Unicloud
+					<div className='h-full leading-[1] pl-6 text-[#344767] dark:text-white'>
+						<h5 className='text-xl leading-snug tracking-normal font-medium text-[#344767] dark:text-white'>
+							{user.name}
 						</h5>
-						<span className='text-sm leading-normal tracking-[0.02857em] text-[#344767] font-medium'>
+						<span className='text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-medium'>
 							Vape Store
 						</span>
 					</div>
@@ -191,8 +191,8 @@ const Profile = () => {
 			<div className='mt-10 mb-6'>
 				<div className='box-border flex flex-row flex-wrap'>
 					<div className='md:px-6 pb-6 px-3 flex-grow-0 box-border basis-full max-w-full'>
-						<div className='text-black text-opacity-[0.87] transition-shadow duration-300 delay-[0ms] overflow-hidden flex flex-col relative min-w-0 break-words bg-white box-border border-0 rounded-2xl shadow-md'>
-							<div className='pt-4 px-4 text-[#344767]'>
+						<div className='text-black text-opacity-[0.87] transition-shadow duration-300 delay-[0ms] overflow-hidden flex flex-col relative min-w-0 break-words bg-white box-border border-0 rounded-2xl shadow-md dark:bg-secondary-dark-bg'>
+							<div className='pt-4 px-4 text-[#344767] dark:text-white'>
 								<h6 className='text-base leading-relaxed tracking-[0.0075em] font-medium'>
 									Profile Settings
 								</h6>
@@ -205,6 +205,7 @@ const Profile = () => {
 										alt='photo_profile'
 									/>
 									<input
+										className='dark:text-white'
 										type="file"
 										id="img"
 										name="img"
@@ -214,14 +215,14 @@ const Profile = () => {
 								</div>
 							</div>
 							<label
-								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
+								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-bold'
 							>
 								Store Name
 							</label>
 							<div className='pt-1 px-4'>
 								<input
 									type='text'
-									className='border-solid border-1 w-[50%]'
+									className='border-solid border-1 w-[50%] bg-transparent dark:text-white'
 									defaultValue={user.name}
 									onChange={(e) => {
 										setUser({ ...user, name: e.target.value });
@@ -229,14 +230,14 @@ const Profile = () => {
 								/>
 							</div>
 							<label
-								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
+								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-bold'
 							>
 								Phone Number
 							</label>
 							<div className='pt-1 px-4'>
 									<input
 										type='text'
-										className='border-solid border-1 w-[50%]'
+										className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 										defaultValue={user.phone_number}
 										onChange={(e) => {
 											setUser({ ...user, phone_number: e.target.value });
@@ -244,14 +245,14 @@ const Profile = () => {
 									/>
 							</div>
 							<label
-								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
+								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-bold'
 							>
 								Email
 							</label>
 							<div className='pt-1 px-4'>
 								<input
 									type='text'
-									className='border-solid border-1 w-[50%]'
+									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={user.email}
 									onChange={(e) => {
 										setUser({ ...user, email: e.target.value });
@@ -314,46 +315,46 @@ const Profile = () => {
 								</select>
 							</div> */}
 							<label
-								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
+								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-bold'
 							>
 								Addres
 							</label>
 							<div className='pt-1 px-4 pb-4'>
 								<textarea
-									className='border-solid border-1 w-[50%]'
+									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={user.address}
 									onChange={(e) => {
 										setUser({ ...user, address: e.target.value });
 									}}
 								/>
 							</div>
-							<div className='pt-4 px-4 text-[#344767]'>
+							<div className='pt-4 px-4 text-[#344767] dark:text-white'>
 								<h6 className='text-base leading-relaxed tracking-[0.0075em] font-medium'>
 									Store Settings
 								</h6>
 							</div>
 							<label
-								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
+								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-bold'
 							>
 								Items Category
 							</label>
 							<div className='pt-1 px-4'>
 								<input
 									type='text'
-									className='border-solid border-1 w-[50%]'
+									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={categories.map(category => category.name).join(', ')}
 									onChange={handleChangeCategory}
 								/>
 							</div>
 							<label
-								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
+								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-bold'
 							>
 								Payment Method
 							</label>
 							<div className='pt-1 px-4 pb-6'>
 								<input
 									type='text'
-									className='border-solid border-1 w-[50%]'
+									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={payments.map(payment => payment.name).join(', ')}
 									onChange={handleChangePayment}
 								/>
