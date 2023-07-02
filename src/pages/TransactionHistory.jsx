@@ -63,6 +63,22 @@ const TransactionHistory = () => {
       total_profit: data.total_profit - data.total_discount,
     };
 
+    if (data.status === 'canceled') {
+      data.order_items.forEach((item) => {
+        const inventory = {
+          id: item.item_id,
+          name: item.inventory.name,
+          category_id: item.inventory.category_id,
+          purchase_price: item.inventory.purchase_price,
+          selling_price: item.inventory.selling_price,
+          qty_stock: item.inventory.qty_stock + item.qty,
+          note: item.inventory.note
+        }
+
+        updateInventory.mutate(inventory);
+      });
+    }
+
     editTransaction.mutate(dataPayload);
   }
 
@@ -161,6 +177,24 @@ const TransactionHistory = () => {
       </div>
     );
 
+    const gridStatus = (props) => (
+      <div>
+        {props.status === 'canceled' ? (
+          <div>
+            <p style={{ color: 'red' }}>{props.status}</p>
+          </div>
+        ) : props.status === 'pending' ? (
+          <div>
+            <p style={{ color: 'orange' }}>{props.status}</p>
+          </div>
+        ) : (
+          <div>
+            <p style={{ color: 'green' }}>{props.status}</p>
+          </div>
+        )}
+      </div>
+    );
+
     const transactionGrid = [
       { type: 'checkbox', width: '50' },
       {
@@ -202,8 +236,8 @@ const TransactionHistory = () => {
         }
       },
       {
-        field: 'status',
         headerText: 'Status',
+        template: gridStatus,
         textAlign: 'Center',
         editType: 'dropdownedit',
         width: '100',
