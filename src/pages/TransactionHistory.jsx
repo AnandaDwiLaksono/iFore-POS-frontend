@@ -35,9 +35,21 @@ const TransactionHistory = () => {
 
   const deleteTransaction = useMutation({
     mutationFn: (id) => {
-      return axios.delete(`${API_URL}/api/transaction_histories/${id}`)
+      return axios.delete(`${API_URL}/api/transaction_histories/${id}`);
     }
-  })
+  });
+
+  const deleteOrderItem = useMutation({
+    mutationFn: (id) => {
+      return axios.delete(`${API_URL}/api/order_items/${id}`);
+    }
+  });
+
+  const updateInventory = useMutation({
+    mutationFn: (data) => {
+      return axios.put(`${API_URL}/api/inventories/${data.id}`, data);
+    }
+  });
 
   const handleEditTransaction = (data) => {
     const dataPayload = {
@@ -52,6 +64,28 @@ const TransactionHistory = () => {
     };
 
     editTransaction.mutate(dataPayload);
+  }
+
+  const handleDeleteTransaction = (args) => {
+    args.data.forEach((item) => {
+      item.order_items.forEach((orderItem) => {
+        const inventory = {
+          id: orderItem.item_id,
+          name: orderItem.inventory.name,
+          category_id: orderItem.inventory.category_id,
+          purchase_price: orderItem.inventory.purchase_price,
+          selling_price: orderItem.inventory.selling_price,
+          qty_stock: orderItem.inventory.qty_stock + orderItem.qty,
+          note: orderItem.inventory.note
+        }
+
+        updateInventory.mutate(inventory);
+        
+        deleteOrderItem.mutate(orderItem.id);
+      });
+
+      deleteTransaction.mutate(item.id);
+    });    
   }
 
   if (!fetchDataTransaction.isLoading) {
@@ -303,9 +337,7 @@ const TransactionHistory = () => {
             }
 
             if (args.requestType === 'delete') {
-              args.data.forEach((item) => {
-                deleteTransaction.mutate(item.id);
-              });    
+              handleDeleteTransaction(args);
             }
           }}
         >
