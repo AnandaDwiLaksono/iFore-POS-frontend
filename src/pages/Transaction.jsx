@@ -47,6 +47,12 @@ const Transaction = () => {
       return axios.post(`${API_URL}/api/transaction_histories`, data);
     }
   });
+
+  const editInventory = useMutation({
+    mutationFn: (newDataInventory) => {
+      return axios.put(`${API_URL}/api/inventories/${newDataInventory.id}`, newDataInventory);
+    },
+  });
   
   const handleGetOrder = (item) => {
     axios.get(`${API_URL}/api/order_items/${item.id}`)
@@ -79,7 +85,21 @@ const Transaction = () => {
   }
 
   const handleAddTransaction = () => {
-    const data = {
+    for (let i = 0; i < orderList.length; i++) {
+      const dataInventory = {
+        id: orderList[i].item_id,
+        name: orderList[i].inventory.name,
+        category_id: orderList[i].inventory.category.id,
+        purchase_price: orderList[i].inventory.purchase_price,
+        selling_price: orderList[i].inventory.selling_price,
+        qty_stock: orderList[i].inventory.qty_stock - orderList[i].qty,
+        note: orderList[i].inventory.note
+      };
+
+      editInventory.mutate(dataInventory);
+    };
+
+    const dataTransaction = {
       payment_type: paymentType,
       order_items_id: orderList.map((item) => item.id),
       status: 'completed',
@@ -90,11 +110,9 @@ const Transaction = () => {
       note: ''
     };
 
-    addTransaction.mutate(data, {
-      onSuccess: (res) => {
-        setOrderList([]);
-      }
-    });
+    addTransaction.mutate(dataTransaction);
+
+    setOrderList([]);
   };
 
   return (
