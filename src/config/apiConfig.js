@@ -1,2 +1,4 @@
-// export const API_URL = 'http://localhost:3002';
-export const API_URL = 'https://ifore-api.up.railway.app';
+export const API_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://ifore-api.up.railway.app'
+    : 'http://localhost:3002';
