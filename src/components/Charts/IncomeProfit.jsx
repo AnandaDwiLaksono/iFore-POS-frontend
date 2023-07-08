@@ -1,8 +1,10 @@
 import { ChartComponent, DateTime, Highlight, Inject, Legend, SeriesCollectionDirective, SeriesDirective, SplineAreaSeries, Tooltip } from '@syncfusion/ej2-react-charts'
 import React from 'react'
+import moment from 'moment';
+
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const IncomeProfit = () => {
+const IncomeProfit = ({ dataIncome, dataProfit}) => {
   const { currentMode } = useStateContext();
 
   const areaPrimaryXAxis = {
@@ -12,50 +14,25 @@ const IncomeProfit = () => {
     intervalType: 'Days',
     edgeLabelPlacement: 'Shift',
     labelStyle: { color: 'gray' },
+    minimum: new Date(moment(dataIncome[8].x)),
+    maximum: new Date(moment(dataIncome[0].x)),
   };
   
   const areaPrimaryYAxis = {
     labelFormat: 'Rp {value}',
     lineStyle: { width: 0 },
-    interval: 500,
+    interval: 500000,
     majorTickLines: { width: 0 },
     minorTickLines: { width: 0 },
     majorGridLines: { dashArray: '5,5', color: currentMode === 'Dark' ? '#20232a' : '#ededed' },
     labelStyle: { color: 'gray' },
-    title: 'Income & Profit (in Thousand)',
+    title: 'Income & Profit',
     titleStyle: { color: currentMode === 'Dark' ? '#fff' : '#33373E' },
   };
-
-  const areaChartData = [
-    [
-      { x: new Date(2023, 2, 6), y: 2200 },
-      { x: new Date(2023, 2, 7), y: 3400 },
-      { x: new Date(2023, 2, 8), y: 2800 },
-      { x: new Date(2023, 2, 9), y: 1600 },
-      { x: new Date(2023, 2, 10), y: 2300 },
-      { x: new Date(2023, 2, 11), y: 2500 },
-      { x: new Date(2023, 2, 12), y: 2900 },
-      { x: new Date(2023, 2, 13), y: 3800 },
-      { x: new Date(2023, 2, 14), y: 1400 },
-      { x: new Date(2023, 2, 15), y: 3100 },
-    ],
-    [
-      { x: new Date(2023, 2, 6), y: 1200},
-      { x: new Date(2023, 2, 7), y: 1300},
-      { x: new Date(2023, 2, 8), y: 1200},
-      { x: new Date(2023, 2, 9), y: 1100},
-      { x: new Date(2023, 2, 10), y: 1200},
-      { x: new Date(2023, 2, 11), y: 1200},
-      { x: new Date(2023, 2, 12), y: 1200},
-      { x: new Date(2023, 2, 13), y: 1300},
-      { x: new Date(2023, 2, 14), y: 1100},
-      { x: new Date(2023, 2, 15), y: 1300},
-    ]
-  ];
   
   const areaCustomSeries = [
     {
-      dataSource: areaChartData[0],
+      dataSource: dataIncome,
       xName: 'x',
       yName: 'y',
       name: 'Income',
@@ -66,7 +43,7 @@ const IncomeProfit = () => {
       fill: '#3acaeb',
     },
     {
-      dataSource: areaChartData[1],
+      dataSource: dataProfit,
       xName: 'x',
       yName: 'y',
       name: 'Profit',
@@ -83,6 +60,7 @@ const IncomeProfit = () => {
       id='area-chart'
       height='324px'
       width='100%'
+      style={{ textAlign: "center" }}
       primaryXAxis={areaPrimaryXAxis}
       primaryYAxis={areaPrimaryYAxis}
       chartArea={{ border: { width: 0 } }}
@@ -95,7 +73,7 @@ const IncomeProfit = () => {
         {areaCustomSeries.map((item, index) => <SeriesDirective key={index} {...item} />)}
       </SeriesCollectionDirective>
     </ChartComponent>
-  )
-}
+  );
+};
 
-export default IncomeProfit
+export default IncomeProfit;

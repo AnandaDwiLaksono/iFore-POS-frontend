@@ -2,17 +2,16 @@ import { AccumulationChartComponent, AccumulationDataLabel, AccumulationLegend, 
 import React from 'react'
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const CategoryPie = () => {
+const CategoryPie = ({ data }) => {
   const { currentMode } = useStateContext();
 
-  const pieChartData = [
-    { x: 'Freebase', y: 34, color: '#017aff' },
-    { x: 'Saltnic', y: 60, color: '#6c47ff' },
-    { x: 'Coil', y: 49, color: '#39c0c8' },
-    { x: 'Accessories', y: 15, color: '#f96300' },
-    { x: 'Pod', y: 9, color: '#f34971' },
-    { x: 'Mod', y: 1, color: '#ff9382' },
-  ];
+  const pieChartColor = ['#017aff', '#6c47ff', '#39c0c8', '#f96300', '#f34971', '#ff9382'];
+
+  data.sort((a, b) => b.qty - a.qty);
+
+  data.forEach((item, index) => {
+    item.color = pieChartColor[index];
+  });
 
   return (
     <AccumulationChartComponent
@@ -27,10 +26,10 @@ const CategoryPie = () => {
       <AccumulationSeriesCollectionDirective>
         <AccumulationSeriesDirective
           name="Category"
-          dataSource={pieChartData}
+          dataSource={data}
           pointColorMapping='color'
-          xName="x"
-          yName="y"
+          xName="name"
+          yName="qty"
           innerRadius="40%"
           startAngle={0}
           endAngle={360}

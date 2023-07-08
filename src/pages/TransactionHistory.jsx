@@ -52,6 +52,7 @@ const TransactionHistory = () => {
   });
 
   const handleEditTransaction = (data) => {
+    console.log(data)
     const dataPayload = {
       id: data.id,
       payment_type: data.payment_type.name,
@@ -238,20 +239,21 @@ const TransactionHistory = () => {
       {
         headerText: 'Status',
         template: gridStatus,
+        field: 'status',
         textAlign: 'Center',
         editType: 'dropdownedit',
         width: '100',
         edit: {
           params: {
-            dataSource: [
+            dataSource: new DataManager([
               { status: 'pending' },
               { status: 'completed' },
               { status: 'canceled' }
-            ],
+            ]),
             fields: { text: "status", value: "status" },
             query: new Query()
           }
-        }
+        },
       },
       {
         headerText: 'Subtotal',
