@@ -55,13 +55,13 @@ const Profile = () => {
 
 	const editProfile = useMutation({
 		mutationFn: async (data) => {
-			return await axios.put(`${API_URL}/api/users/1`, data);
+			return await axios.put(`${API_URL}/api/users/${data.id}`, data);
 		},
 	});
 
 	const editLogo = useMutation({
 		mutationFn: async (data) => {
-			return await axios.put(`${API_URL}/api/users/logo/1`, {"logo": data});
+			return await axios.put(`${API_URL}/api/users/logo/${user.id}`, {"logo": data});
 		},
 	});
 
@@ -157,6 +157,8 @@ const Profile = () => {
 			});
 		}
 	};
+
+	console.log(user);
 
 	return (
 		<div className='p-6 relative'>
