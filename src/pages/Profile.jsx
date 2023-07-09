@@ -158,8 +158,6 @@ const Profile = () => {
 		}
 	};
 
-	console.log(user);
-
 	return (
 		<div className='p-6 relative'>
 			<div className='flex items-center min-h-[18.75rem] bg-center bg-cover bg-profile rounded-2xl overflow-hidden'></div>
