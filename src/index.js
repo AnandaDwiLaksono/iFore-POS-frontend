@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { registerLicense } from '@syncfusion/ej2-base';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Analytics } from '@vercel/analytics/react';
 
 import './index.css';
 import App from './App';
@@ -18,6 +19,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <ContextProvider>
         <App />
+        <Analytics />
       </ContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
