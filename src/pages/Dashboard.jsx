@@ -110,7 +110,7 @@ const Dashboard = () => {
 
     const bestSellerCategory = categoryData.sort((a, b) => b.qty - a.qty)[0];
 
-    const incomeDataActual = dataChart('total').slice(1, 6).reverse().map((item) => item.y);
+    // const incomeDataActual = dataChart('total').slice(1, 6).reverse().map((item) => item.y);
 
     console.log(dataChart('total'));
 
