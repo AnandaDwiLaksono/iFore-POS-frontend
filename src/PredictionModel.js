@@ -541,24 +541,19 @@ const HoltWinters = () => {
   
     for (i = 2; i < len; i++) {
       if (i - period >= 0) {
-        st[i] = ((alpha * data[i]) / it[i - period]) +
-          ((1.0 - alpha) * (st[i - 1] + bt[i - 1]))
+        st[i] = ((alpha * data[i]) / it[i - period]) + ((1.0 - alpha) * (st[i - 1] + bt[i - 1]))
       } else {
-        st[i] = (alpha * data[i]) + ((1.0 - alpha) *
-                                     (st[i - 1] + bt[i - 1]))
+        st[i] = (alpha * data[i]) + ((1.0 - alpha) * (st[i - 1] + bt[i - 1]))
       }
   
-      bt[i] = (gamma * (st[i] - st[i - 1])) +
-        ((1 - gamma) * bt[i - 1])
+      bt[i] = (gamma * (st[i] - st[i - 1])) + ((1 - gamma) * bt[i - 1])
   
       if (i - period >= 0) {
-        it[i] = ((beta * data[i]) / st[i]) +
-          ((1.0 - beta) * it[i - period])
+        it[i] = ((beta * data[i]) / st[i]) + ((1.0 - beta) * it[i - period])
       }
   
       if (i + m >= period) {
-        ft[i + m] = (st[i] + (m * bt[i])) *
-          it[i - period + m]
+        ft[i + m] = (st[i] + (m * bt[i])) * it[i - period + m]
       }
     }
   
