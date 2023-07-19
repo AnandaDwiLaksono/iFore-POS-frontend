@@ -112,8 +112,7 @@ const Dashboard = () => {
 
     const incomeDataActual = dataChart('total').slice(1, 6).reverse().map((item) => item.y);
 
-    console.log(incomeDataActual);
-    // console.log(new Date(moment().subtract(1, 'days')));
+    console.log(dataChart('total'));
 
     const incomeDatas = [
       [
