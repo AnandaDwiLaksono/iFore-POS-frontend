@@ -22,6 +22,7 @@
     "arima": "^0.2.5",
     "axios": "^1.4.0",
     "ml-cart": "^2.1.1",
+    "ml-random-forest": "^2.1.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
