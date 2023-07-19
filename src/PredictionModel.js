@@ -6,8 +6,6 @@ const ARIMA = require('arima');
 const RandomForestRegression = require('ml-random-forest').RandomForestRegression;
 // Impor library brain.js
 const brain = require('brain.js');
-// Impor library holtwinters
-const holtWinters = require('holtwinters');
 
 // Data penjualan
 // [1775000, 1430000, 3480000, 2620000, 2005000, 1510000, 1720000, 2240000, 3665000, 2895000, 1750000]
@@ -162,7 +160,7 @@ const AutoregressiveIntegratedMovingAverage = () => {
   // Fungsi untuk mendapatkan prediksi menggunakan model ARIMA
   function predictARIMA(data) {
     const arimaModel = new ARIMA({ p: 1, d: 1, q: 1 }).train(data); // Membangun model ARIMA
-    const [predictions, error] = arimaModel.predict(3); // Memperkirakan 3 penjualan selanjutnya
+    const predictions = arimaModel.predict(3); // Memperkirakan 3 penjualan selanjutnya
     return predictions;
   }
 
