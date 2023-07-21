@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const IncomeProfit = ({ dataIncome, dataProfit}) => {
+const IncomeProfit = ({ dataIncome, dataProfit, date }) => {
   const { currentMode } = useStateContext();
 
   const areaPrimaryXAxis = {
@@ -14,8 +14,8 @@ const IncomeProfit = ({ dataIncome, dataProfit}) => {
     intervalType: 'Days',
     edgeLabelPlacement: 'Shift',
     labelStyle: { color: 'gray' },
-    minimum: new Date(moment(dataIncome[8].x)),
-    maximum: new Date(moment(dataIncome[0].x)),
+    minimum: moment(date[0]).isSame(date[2]) ? new Date(dataIncome[8].x) : new Date(date[0]),
+    maximum: new Date(moment(date[1]).add(2, 'days')),
   };
   
   const areaPrimaryYAxis = {

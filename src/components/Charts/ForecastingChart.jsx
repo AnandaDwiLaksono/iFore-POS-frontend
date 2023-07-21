@@ -12,6 +12,8 @@ const ForecastingChart = ({ id, data, label, interval, title, header }) => {
     intervalType: 'Days',
     edgeLabelPlacement: 'Shift',
     labelStyle: { color: 'gray' },
+    minimum: data[0][0].x,
+    maximum: data[1][2].x,
   };
   
   const linePrimaryYAxis = {

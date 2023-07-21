@@ -76,10 +76,11 @@ const Dashboard = () => {
       categoryData[i] = {...categoryData[i], qty: qtyTotal};
     };
 
-    const dataChart = (args) => {
+    const dataTimeSeries = (args) => {
       let data = [];
+      const days = moment().diff(moment('2023-07-09'), 'days') + 1;
 
-      for (let i = -1; i < 8; i++) {
+      for (let i = -1; i < days; i++) {
         const transactionDataFiltered = transactionData.filter((item) => item.status === 'completed' && moment(formattedDate(item.createdAt)).isSameOrAfter(formattedDate(moment().subtract(i, 'days'))) && moment(formattedDate(item.createdAt)).isSameOrBefore(formattedDate(moment().subtract(i, 'days'))));
   
         const total = transactionDataFiltered.reduce((acc, curr) => acc + curr[args], 0);
@@ -90,65 +91,111 @@ const Dashboard = () => {
       return data;
     };
 
+    const dataCategoryTimeSeries = (args) => {
+      let data = [];
+      const days = moment().diff(moment('2023-07-09'), 'days') + 1;
+      
+      for (let i = -1; i < days; i++) {
+        const transactionDataFiltered = transactionData.filter((item) => item.status === 'completed' && moment(formattedDate(item.createdAt)).isSameOrAfter(formattedDate(moment().subtract(i, 'days'))) && moment(formattedDate(item.createdAt)).isSameOrBefore(formattedDate(moment().subtract(i, 'days'))));
+        
+        let total = 0;
+      
+        transactionDataFiltered.forEach((item) => {
+          item.order_items.forEach((orderItem) => {
+            if (orderItem.inventory.category.name === args) {
+              total += orderItem.qty;
+            };
+          });
+        });
+  
+        data.push({ x: new Date(moment().subtract(i, 'days')), y: total });
+      };
+
+      return data;
+    };
+
     const transactionTotal = transactionDataFiltered.length;
-
     const transactionTotalBefore = transactionDataFilteredBefore.length;
-
     const transactionTotalPercentage = percentage(transactionTotal, transactionTotalBefore);
 
     const incomeTotal = transactionDataFiltered.reduce((acc, curr) => acc + curr.total, 0);
-
     const incomeTotalBefore = transactionDataFilteredBefore.reduce((acc, curr) => acc + curr.total, 0);
-
     const incomeTotalPercentage = percentage(incomeTotal, incomeTotalBefore);
 
     const profitTotal = transactionDataFiltered.reduce((acc, curr) => acc + curr.total_profit, 0);
-
     const profitTotalBefore = transactionDataFilteredBefore.reduce((acc, curr) => acc + curr.total_profit, 0);
-
     const profitTotalPercentage = percentage(profitTotal, profitTotalBefore);
 
     const bestSellerCategory = categoryData.sort((a, b) => b.qty - a.qty)[0];
 
-    // const incomeDataActual = dataChart('total').slice(1, 6).reverse().map((item) => item.y);
-
-    console.log(dataChart('total'));
-
-    const incomeDatas = [
-      [
-        { x: new Date(2023, 2, 6), y: 2200 },
-        { x: new Date(2023, 2, 7), y: 3400 },
-        { x: new Date(2023, 2, 8), y: 2800 },
-        { x: new Date(2023, 2, 9), y: 1600 },
-        { x: new Date(2023, 2, 10), y: 2300 },
-        { x: new Date(2023, 2, 11), y: 1200 },
-        { x: new Date(2023, 2, 12), y: 1200 },
-      ],
-      [
-        { x: new Date(2023, 2, 12), y: 1000 },
-        { x: new Date(2023, 2, 13), y: 1300 },
-        { x: new Date(2023, 2, 14), y: 1100 },
-        { x: new Date(2023, 2, 15), y: 1300 },
-      ]
+    const incomeDataActual = dataTimeSeries('total').slice(1,9).reverse();
+    const incomeDataForecasting = [
+      { x: new Date(moment()), y: 2000000 },
+      { x: new Date(moment().add(1, 'days')), y: 2300000 },
+      { x: new Date(moment().add(2, 'days')), y: 2100000 },
     ];
 
-    const categoriesData = [
-      [
-        { x: new Date(2023, 2, 6), y: 22 },
-        { x: new Date(2023, 2, 7), y: 34 },
-        { x: new Date(2023, 2, 8), y: 28 },
-        { x: new Date(2023, 2, 9), y: 16 },
-        { x: new Date(2023, 2, 10), y: 23 },
-        { x: new Date(2023, 2, 11), y: 12 },
-        { x: new Date(2023, 2, 12), y: 12 },
-      ],
-      [
-        { x: new Date(2023, 2, 12), y: 20 },
-        { x: new Date(2023, 2, 13), y: 13 },
-        { x: new Date(2023, 2, 14), y: 11 },
-        { x: new Date(2023, 2, 15), y: 13 },
-      ]
+    const freebaseDataActual = dataCategoryTimeSeries('Freebase').slice(1,9).reverse();
+    const freebaseDataForecasting = [
+      { x: new Date(moment()), y: 2 },
+      { x: new Date(moment().add(1, 'days')), y: 2 },
+      { x: new Date(moment().add(2, 'days')), y: 2 },
     ];
+
+    const saltnicDataActual = dataCategoryTimeSeries('Saltnic').slice(1,9).reverse();
+    const saltnicDataForecasting = [
+      { x: new Date(moment()), y: 2 },
+      { x: new Date(moment().add(1, 'days')), y: 2 },
+      { x: new Date(moment().add(2, 'days')), y: 2 },
+    ];
+
+    const podDataActual = dataCategoryTimeSeries('Pod').slice(1,9).reverse();
+    const podDataForecasting = [
+      { x: new Date(moment()), y: 2 },
+      { x: new Date(moment().add(1, 'days')), y: 2 },
+      { x: new Date(moment().add(2, 'days')), y: 2 },
+    ];
+
+    const modDataActual = dataCategoryTimeSeries('Mod').slice(1,9).reverse();
+    const modDataForecasting = [
+      { x: new Date(moment()), y: 2 },
+      { x: new Date(moment().add(1, 'days')), y: 2 },
+      { x: new Date(moment().add(2, 'days')), y: 2 },
+    ];
+
+    const coilDataActual = dataCategoryTimeSeries('Coil').slice(1,9).reverse();
+    const coilDataForecasting = [
+      { x: new Date(moment()), y: 2 },
+      { x: new Date(moment().add(1, 'days')), y: 2 },
+      { x: new Date(moment().add(2, 'days')), y: 2 },
+    ];
+
+    const accessoriesDataActual = dataCategoryTimeSeries('Accessories').slice(1,9).reverse();
+    const accessoriesDataForecasting = [
+      { x: new Date(moment()), y: 2 },
+      { x: new Date(moment().add(1, 'days')), y: 2 },
+      { x: new Date(moment().add(2, 'days')), y: 2 },
+    ];
+
+    // console.log([freebaseDataActual, freebaseDataForecasting]);
+
+    // const categoriesData = [
+    //   [
+    //     { x: new Date(2023, 2, 6), y: 22 },
+    //     { x: new Date(2023, 2, 7), y: 34 },
+    //     { x: new Date(2023, 2, 8), y: 28 },
+    //     { x: new Date(2023, 2, 9), y: 16 },
+    //     { x: new Date(2023, 2, 10), y: 23 },
+    //     { x: new Date(2023, 2, 11), y: 12 },
+    //     { x: new Date(2023, 2, 12), y: 12 },
+    //     { x: new Date(2023, 2, 13), y: 13 },
+    //   ],
+    //   [
+    //     { x: new Date(2023, 2, 13), y: 13 },
+    //     { x: new Date(2023, 2, 14), y: 11 },
+    //     { x: new Date(2023, 2, 15), y: 13 },
+    //   ]
+    // ];
 
     return (
       <div className='flex flex-col px-11 py-6 gap-6'>
@@ -179,7 +226,7 @@ const Dashboard = () => {
                   Income & Profit Overview
                 </div>
                 <div className='w-full'>
-                  <IncomeProfit dataIncome={dataChart('total')} dataProfit={dataChart('total_profit')} />
+                  <IncomeProfit dataIncome={dataTimeSeries('total')} dataProfit={dataTimeSeries('total_profit')} date={[formattedDate(selectedDate[0]), formattedDate(selectedDate[1]), formattedDate(new Date())]} />
                 </div>
               </div>
             </div>
@@ -201,13 +248,13 @@ const Dashboard = () => {
           Forecasting
         </div>
         <div className='flex flex-wrap -ml-6 -mt-6 w-[calc(100%+24px)] justify-center'>
-          <ForecastingChart id='income-chart' data={incomeDatas} label='RP {value}' title='Income' header='Income' />
-          <ForecastingChart id='freebase-chart' data={categoriesData} label='{value}' header='Freebase' />
-          <ForecastingChart id='saltnic-chart' data={categoriesData} label='{value}' header='Saltnic' />
-          <ForecastingChart id='pod-chart' data={categoriesData} label='{value}' header='Pod' />
-          <ForecastingChart id='mod-chart' data={categoriesData} label='{value}' header='Mod' />
-          <ForecastingChart id='coil-chart' data={categoriesData} label='{value}' header='Coil' />
-          <ForecastingChart id='accessories-chart' data={categoriesData} label='{value}' header='Accessories' />
+          <ForecastingChart id='income-chart' data={[incomeDataActual, incomeDataForecasting]} label='RP {value}' title='Income' header='Income' interval={500000} />
+          <ForecastingChart id='freebase-chart' data={[freebaseDataActual, freebaseDataForecasting]} label='{value}' header='Freebase' interval={2} />
+          <ForecastingChart id='saltnic-chart' data={[saltnicDataActual, saltnicDataForecasting]} label='{value}' header='Saltnic' interval={2} />
+          <ForecastingChart id='pod-chart' data={[podDataActual, podDataForecasting]} label='{value}' header='Pod' interval={2} />
+          <ForecastingChart id='mod-chart' data={[modDataActual, modDataForecasting]} label='{value}' header='Mod' interval={2} />
+          <ForecastingChart id='coil-chart' data={[coilDataActual, coilDataForecasting]} label='{value}' header='Coil' interval={2} />
+          <ForecastingChart id='accessories-chart' data={[accessoriesDataActual, accessoriesDataForecasting]} label='{value}' header='Accessories' interval={2} />
         </div>
       </div>
     );
