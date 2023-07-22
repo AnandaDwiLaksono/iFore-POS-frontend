@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaMoneyBillWaveAlt, FaWallet } from 'react-icons/fa';
 import { BiCategory } from 'react-icons/bi';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import moment from 'moment';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import { Card, CategoryPie, ForecastingChart, IncomeProfit } from '../components';
 import { API_URL } from '../config/apiConfig';
-// import { GetResult } from '../utils/RandomForestModel';
 
 const Dashboard = () => {
   const { numberFormat } = useStateContext();
 
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
-  // const [dataIncomeTrain, setDataIncomeTrain] = useState([]);
 
   const fetchDataTransaction = useQuery({
     queryKey: ['transaction'],
@@ -32,20 +30,6 @@ const Dashboard = () => {
     },
   });
 
-  // const randomForest = useMutation({
-  //   mutationFn: (data) => {
-  //     return axios.post(`${API_URL}/api/predictions/randomforest`, data);
-  //   },
-  // });
-
-  // if (dataIncomeTrain.length > 0) {
-  //   randomForest.mutate({ salesData: dataIncomeTrain }, {
-  //     onSuccess: (data) => {
-  //       console.log(data);
-  //     },
-  //   });
-  // };
-
   if (!fetchDataTransaction.isLoading && !fetchDataCategory.isLoading) {
     const transactionData = fetchDataTransaction.data.data.data;
     const categoryData = fetchDataCategory.data.data.data;
@@ -53,7 +37,6 @@ const Dashboard = () => {
     const randomForest = (data, variable) => {
       axios.post(`${API_URL}/api/predictions/randomforest`, data)
         .then((res) => {
-          // return res.data.data;
           localStorage.setItem(variable, JSON.stringify(res.data.data));
         }
       );
@@ -162,8 +145,10 @@ const Dashboard = () => {
     const dataIncomeTrain = dataTimeSeries('total').slice(2).reverse().map((item) => item.y);
     randomForest({ salesData: dataIncomeTrain }, 'dataIncomeForecasting');
     const dataIncomeForecasting = JSON.parse(localStorage.getItem('dataIncomeForecasting'));
-    for (let i = 0; i < 3; i++) {
-      incomeDataForecasting[i].y = dataIncomeForecasting[i];
+    if (dataIncomeForecasting) {
+      for (let i = 0; i < 3; i++) {
+        incomeDataForecasting[i].y = dataIncomeForecasting[i];
+      }
     }
 
     const freebaseDataActual = dataCategoryTimeSeries('Freebase').slice(1,9).reverse();
@@ -175,8 +160,10 @@ const Dashboard = () => {
     const dataFreebaseTrain = dataCategoryTimeSeries('Freebase').slice(2).reverse().map((item) => item.y);
     randomForest({ salesData: dataFreebaseTrain }, 'dataFreebaseForecasting');
     const dataFreebaseForecasting = JSON.parse(localStorage.getItem('dataFreebaseForecasting'));
-    for (let i = 0; i < 3; i++) {
-      freebaseDataForecasting[i].y = dataFreebaseForecasting[i];
+    if (dataFreebaseForecasting) {
+      for (let i = 0; i < 3; i++) {
+        freebaseDataForecasting[i].y = dataFreebaseForecasting[i];
+      }
     }
 
     const saltnicDataActual = dataCategoryTimeSeries('Saltnic').slice(1,9).reverse();
@@ -188,8 +175,10 @@ const Dashboard = () => {
     const dataSaltnicTrain = dataCategoryTimeSeries('Saltnic').slice(2).reverse().map((item) => item.y);
     randomForest({ salesData: dataSaltnicTrain }, 'dataSaltnicForecasting');
     const dataSaltnicForecasting = JSON.parse(localStorage.getItem('dataSaltnicForecasting'));
-    for (let i = 0; i < 3; i++) {
-      saltnicDataForecasting[i].y = dataSaltnicForecasting[i];
+    if (dataSaltnicForecasting) {
+      for (let i = 0; i < 3; i++) {
+        saltnicDataForecasting[i].y = dataSaltnicForecasting[i];
+      }
     }
 
     const podDataActual = dataCategoryTimeSeries('Pod').slice(1,9).reverse();
@@ -201,8 +190,10 @@ const Dashboard = () => {
     const dataPodTrain = dataCategoryTimeSeries('Pod').slice(2).reverse().map((item) => item.y);
     randomForest({ salesData: dataPodTrain }, 'dataPodForecasting');
     const dataPodForecasting = JSON.parse(localStorage.getItem('dataPodForecasting'));
-    for (let i = 0; i < 3; i++) {
-      podDataForecasting[i].y = dataPodForecasting[i];
+    if (dataPodForecasting) {
+      for (let i = 0; i < 3; i++) {
+        podDataForecasting[i].y = dataPodForecasting[i];
+      }
     }
 
     const modDataActual = dataCategoryTimeSeries('Mod').slice(1,9).reverse();
@@ -214,8 +205,10 @@ const Dashboard = () => {
     const dataModTrain = dataCategoryTimeSeries('Mod').slice(2).reverse().map((item) => item.y);
     randomForest({ salesData: dataModTrain }, 'dataModForecasting');
     const dataModForecasting = JSON.parse(localStorage.getItem('dataModForecasting'));
-    for (let i = 0; i < 3; i++) {
-      modDataForecasting[i].y = dataModForecasting[i];
+    if (dataModForecasting) {
+      for (let i = 0; i < 3; i++) {
+        modDataForecasting[i].y = dataModForecasting[i];
+      }
     }
 
     const coilDataActual = dataCategoryTimeSeries('Coil').slice(1,9).reverse();
@@ -227,8 +220,10 @@ const Dashboard = () => {
     const dataCoilTrain = dataCategoryTimeSeries('Coil').slice(2).reverse().map((item) => item.y);
     randomForest({ salesData: dataCoilTrain }, 'dataCoilForecasting');
     const dataCoilForecasting = JSON.parse(localStorage.getItem('dataCoilForecasting'));
-    for (let i = 0; i < 3; i++) {
-      coilDataForecasting[i].y = dataCoilForecasting[i];
+    if (dataCoilForecasting) {
+      for (let i = 0; i < 3; i++) {
+        coilDataForecasting[i].y = dataCoilForecasting[i];
+      }
     }
 
     const accessoriesDataActual = dataCategoryTimeSeries('Accessories').slice(1,9).reverse();
@@ -240,8 +235,10 @@ const Dashboard = () => {
     const dataAccessoriesTrain = dataCategoryTimeSeries('Accessories').slice(2).reverse().map((item) => item.y);
     randomForest({ salesData: dataAccessoriesTrain }, 'dataAccessoriesForecasting');
     const dataAccessoriesForecasting = JSON.parse(localStorage.getItem('dataAccessoriesForecasting'));
-    for (let i = 0; i < 3; i++) {
-      accessoriesDataForecasting[i].y = dataAccessoriesForecasting[i];
+    if (dataAccessoriesForecasting) {
+      for (let i = 0; i < 3; i++) {
+        accessoriesDataForecasting[i].y = dataAccessoriesForecasting[i];
+      }
     }
 
     return (
