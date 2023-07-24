@@ -67,7 +67,7 @@ const Dashboard = () => {
         return `+${result}%`;
       } else {
         return `${result}%`;
-      }
+      };
     };
 
     for (let i = 0; i < categoryData.length; i++) {

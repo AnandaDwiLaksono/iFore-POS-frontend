@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { API_URL } from '../config/apiConfig';
@@ -156,6 +157,8 @@ const Profile = () => {
 				deletePayment.mutate(item);
 			});
 		}
+
+		toast.success("Profile updated successfully!");
 	};
 
 	return (

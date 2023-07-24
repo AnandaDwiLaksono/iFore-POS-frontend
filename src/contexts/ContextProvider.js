@@ -76,7 +76,7 @@ export const ContextProvider = ({ children }) => {
             numberFormat,
             orderId,
             setOnOrder,
-            onOrder
+            onOrder,
         }}>
             {children}
         </StateContext.Provider>

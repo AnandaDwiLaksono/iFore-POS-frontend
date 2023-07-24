@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { ColumnDirective, ColumnMenu, ColumnsDirective, DetailRow, Edit, Filter, GridComponent, Inject, Page, Reorder, Resize, Search, Selection, Sort, Toolbar } from '@syncfusion/ej2-react-grids';
 import { DataManager, Query } from '@syncfusion/ej2-data';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { toast } from 'react-toastify';
 import axios from 'axios';
+import moment from 'moment';
 
 import { Header } from '../components';
 import { API_URL } from '../config/apiConfig';
 
 const TransactionHistory = () => {
   const [paymentType, setPaymentType] = useState([]);
+  const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
 
   const fetchDataTransaction = useQuery({
     queryKey: ['transaction'],
@@ -81,6 +85,8 @@ const TransactionHistory = () => {
     }
 
     editTransaction.mutate(dataPayload);
+
+    toast.success('Transaction updated successfully');
   }
 
   const handleDeleteTransaction = (args) => {
@@ -102,11 +108,27 @@ const TransactionHistory = () => {
       });
 
       deleteTransaction.mutate(item.id);
-    });    
+    });
+
+    toast.success('Transaction deleted successfully');
   }
 
   if (!fetchDataTransaction.isLoading) {
-    const transactionData = new DataManager(fetchDataTransaction.data.data.data);
+    const dataTransaction = fetchDataTransaction.data.data.data;
+    
+    const formattedDate = (date) => {
+      const newDate = new Date(date);
+      
+      const day = String(newDate.getDate()).padStart(2, '0');
+      const month = String(newDate.getMonth() + 1).padStart(2, '0');
+      const year = newDate.getFullYear();
+      
+      return `${year}-${month}-${day}`;
+    };
+    
+    const transactionDataFiltered = dataTransaction.filter((item) => moment(formattedDate(item.createdAt)).isSameOrAfter(formattedDate(selectedDate[0])) && moment(formattedDate(item.createdAt)).isSameOrBefore(formattedDate(selectedDate[1])));
+    
+    const transactionData = new DataManager(transactionDataFiltered);
 
     const gridName = (props) => (
       <div>
@@ -337,6 +359,16 @@ const TransactionHistory = () => {
     return (
       <div className='m-2 md:m-10 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
         <Header category='Page' title='Transaction History' />
+          <div className='flex justify-end w-full sm:w-auto'>
+            <div className='md:w-1/6 w-auto'>
+              <DateRangePickerComponent
+                placeholder={new Date().toLocaleDateString()}
+                max={new Date()}
+                format='dd/MM/yyyy'
+                onChange={(e) => e.value ? setSelectedDate(e.value) : setSelectedDate([new Date(), new Date()])}
+              />
+            </div>
+          </div>
         <GridComponent id='gridcomp'
           dataSource={transactionData}
           childGrid={childGrid}

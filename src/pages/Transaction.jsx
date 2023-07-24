@@ -6,6 +6,7 @@ import { MdCancel } from 'react-icons/md';
 import { BsCash, BsCreditCard } from 'react-icons/bs';
 import { AiOutlineQrcode } from 'react-icons/ai';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { useStateContext } from '../contexts/ContextProvider';
@@ -82,6 +83,7 @@ const Transaction = () => {
     });
 
     setOrderList([]);
+    toast.success('Order list deleted successfully');
   }
 
   const handleAddTransaction = () => {
@@ -113,6 +115,7 @@ const Transaction = () => {
     addTransaction.mutate(dataTransaction);
 
     setOrderList([]);
+    toast.success('Transaction added successfully');
   };
 
   return (

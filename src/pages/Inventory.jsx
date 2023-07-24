@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { ColumnDirective, ColumnMenu, ColumnsDirective, Edit, Filter, GridComponent, Group, Inject, Page, Reorder, Resize, Search, Selection, Sort, Toolbar } from '@syncfusion/ej2-react-grids';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { DataManager, Query } from '@syncfusion/ej2-data';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import { Header } from '../components';
 import { useStateContext } from '../contexts/ContextProvider';
 import { API_URL } from '../config/apiConfig';
-import axios from 'axios';
 
 const Inventory = () => {
   const{ currentColor } = useStateContext();
@@ -42,7 +43,8 @@ const Inventory = () => {
         headerText: 'Name',
         template: gridInventoryName,
         width: '200',
-        textAlign: 'Center'
+        textAlign: 'Center',
+        validationRules: { required: true }
       },
       { field: 'category.name',
         headerText: 'Category',
@@ -55,7 +57,8 @@ const Inventory = () => {
             fields: { text: "name", value: "name" },
             query: new Query()
           }
-        }
+        },
+        validationRules: { required: true }
       },
       {
         field: 'purchase_price',
@@ -125,20 +128,10 @@ const Inventory = () => {
     mutationFn: (idInventory) => {
       return axios.delete(`${API_URL}/api/inventories/${idInventory}`);
     },
+    onSuccess: () => {
+      toast.success('Item deleted successfully');
+    }
   });
-
-  const handleAddInventory = (newInventory) => {
-    const data = {
-      name: newInventory.name,
-      category_id: categories.find(item => item.name === newInventory.category.name).id,
-      purchase_price: newInventory.purchase_price,
-      selling_price: newInventory.selling_price,
-      qty_stock: newInventory.qty_stock,
-      note: newInventory.note === undefined ? '' : newInventory.note
-    };
-
-    addInventory.mutate(data);
-  };
 
   const handleEditInventory = (newInventory) => {
     const data = {
@@ -152,11 +145,31 @@ const Inventory = () => {
     };
 
     editInventory.mutate(data);
+    
+    toast.success(`Item named ${newInventory.name} has been edited!`);
   };
   
   if (!fetchInventories.isLoading) {
     const inventories = fetchInventories.data.data.data.sort((a, b) => a.name.localeCompare(b.name));
     const dataInventories = new DataManager(inventories);
+
+    const handleAddInventory = (newInventory) => {
+      if (inventories.filter(item => item.name === newInventory.name).length === 2) {
+        toast.error(`Item named ${newInventory.name} already exists!`);
+      } else {
+        const data = {
+          name: newInventory.name,
+          category_id: categories.find(item => item.name === newInventory.category.name).id,
+          purchase_price: newInventory.purchase_price,
+          selling_price: newInventory.selling_price,
+          qty_stock: newInventory.qty_stock,
+          note: newInventory.note === undefined ? '' : newInventory.note
+        };
+    
+        addInventory.mutate(data);
+        toast.success(`Item named ${newInventory.name} has been added!`);
+      };
+    };
 
     return (
       <div className='m-2 md:m-10 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>

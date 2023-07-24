@@ -1,8 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiSettings } from 'react-icons/fi';
+import { ToastContainer, Slide } from 'react-toastify';
 
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { Navbar, Sidebar, ThemeSettings} from './components';
 import { useStateContext } from './contexts/ContextProvider';
 import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory, Profile } from './pages';
@@ -70,6 +72,19 @@ function App() {
           </div>
         </div>
       </BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={currentMode === 'Dark' ? 'dark' : 'light'}
+        transition={Slide}
+      />
     </div>
   );
 }

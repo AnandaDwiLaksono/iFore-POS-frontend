@@ -63,7 +63,7 @@ const AddOrderList = ({ dataItem, dataOrder }) => {
     }
 
     setAddOrderList(false);
-    setIcon(true)
+    setIcon(true);
   }
 
   return (
