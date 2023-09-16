@@ -9,7 +9,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ContextProvider } from './contexts/ContextProvider';
 
-registerLicense('ORg4AjUWIQA/Gnt2VVhkQlFadVdJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkFjX39dcXNRT2ZcUEE=');
+registerLicense(process.env.REACT_APP_REGISTER_LICENSE_SYNCFUSION);
 
 const queryClient = new QueryClient();
 

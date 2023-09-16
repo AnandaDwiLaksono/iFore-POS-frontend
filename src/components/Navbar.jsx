@@ -6,7 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useStateContext } from '../contexts/ContextProvider';
-import { API_URL } from '../config/apiConfig';
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title}
@@ -51,7 +50,7 @@ const Navbar = () => {
 	useQuery({
 		queryKey: ["user"],
 		queryFn: async () => {
-			return await axios.get(`${API_URL}/api/users`);
+			return await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
 		},
 		onSuccess: (data) => {
 			setUser(data.data.data[0]);

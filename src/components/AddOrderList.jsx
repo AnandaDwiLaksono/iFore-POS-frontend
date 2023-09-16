@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useStateContext } from '../contexts/ContextProvider';
-import { API_URL } from '../config/apiConfig';
 
 const AddOrderList = ({ dataItem, dataOrder }) => {
   const { currencyFormat, icon, setIcon, setAddOrderList, currentColor, onOrder, setOnOrder } = useStateContext();
@@ -15,7 +14,7 @@ const AddOrderList = ({ dataItem, dataOrder }) => {
 
   const addOrder = useMutation({
     mutationFn: (orderList) => {
-      return axios.post(`${API_URL}/api/order_items`, orderList);
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/order_items`, orderList);
     },
     onSuccess: (data) => {
       dataOrder(data.data.order);
@@ -27,7 +26,7 @@ const AddOrderList = ({ dataItem, dataOrder }) => {
 
   const editOrder = useMutation({
     mutationFn: (orderList) => {
-      return axios.put(`${API_URL}/api/order_items/${dataItem.id}`, orderList);
+      return axios.put(`${process.env.REACT_APP_API_URL}/api/order_items/${dataItem.id}`, orderList);
     },
     onSuccess: (data) => {
       dataOrder(data.data.order);

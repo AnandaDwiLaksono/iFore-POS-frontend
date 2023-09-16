@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 
 import { Header } from '../components';
 import { useStateContext } from '../contexts/ContextProvider';
-import { API_URL } from '../config/apiConfig';
 
 const Inventory = () => {
   const{ currentColor } = useStateContext();
@@ -95,7 +94,7 @@ const Inventory = () => {
   useQuery({
     queryKey: ['category'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/categories`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
     },
     onSuccess: (data) => {
       setCategories(data.data.data);
@@ -108,25 +107,25 @@ const Inventory = () => {
   const fetchInventories = useQuery({
     queryKey: ['inventory'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/inventories`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/inventories`);
     }
   });
 
   const addInventory = useMutation({
     mutationFn: (newDataInventory) => {
-      return axios.post(`${API_URL}/api/inventories`, newDataInventory);
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/inventories`, newDataInventory);
     },
   });
 
   const editInventory = useMutation({
     mutationFn: (newDataInventory) => {
-      return axios.put(`${API_URL}/api/inventories/${newDataInventory.id}`, newDataInventory);
+      return axios.put(`${process.env.REACT_APP_API_URL}/api/inventories/${newDataInventory.id}`, newDataInventory);
     },
   });
 
   const deleteInventory = useMutation({
     mutationFn: (idInventory) => {
-      return axios.delete(`${API_URL}/api/inventories/${idInventory}`);
+      return axios.delete(`${process.env.REACT_APP_API_URL}/api/inventories/${idInventory}`);
     },
     onSuccess: () => {
       toast.success('Item deleted successfully');

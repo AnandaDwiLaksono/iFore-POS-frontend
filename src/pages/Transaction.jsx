@@ -11,7 +11,6 @@ import axios from 'axios';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import { AddOrderList } from '../components';
-import { API_URL } from '../config/apiConfig';
 
 const Transaction = () => {
   const { addOrderList, setAddOrderList, itemData, setItemData, numberFormat, currentColor, setOnOrder } = useStateContext();
@@ -27,7 +26,7 @@ const Transaction = () => {
   useQuery({
     queryKey: ['inventory'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/inventories`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/inventories`);
     },
     onSuccess: (res) => {
       const data = res.data.data;
@@ -39,24 +38,24 @@ const Transaction = () => {
 
   const deleteOrder = useMutation({
     mutationFn: (item) => {
-      return axios.delete(`${API_URL}/api/order_items/${item}`);
+      return axios.delete(`${process.env.REACT_APP_API_URL}/api/order_items/${item}`);
     }
   });
   
   const addTransaction = useMutation({
     mutationFn: (data) => {
-      return axios.post(`${API_URL}/api/transaction_histories`, data);
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/transaction_histories`, data);
     }
   });
 
   const editInventory = useMutation({
     mutationFn: (newDataInventory) => {
-      return axios.put(`${API_URL}/api/inventories/${newDataInventory.id}`, newDataInventory);
+      return axios.put(`${process.env.REACT_APP_API_URL}/api/inventories/${newDataInventory.id}`, newDataInventory);
     },
   });
   
   const handleGetOrder = (item) => {
-    axios.get(`${API_URL}/api/order_items/${item.id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/order_items/${item.id}`)
       .then((res) => {
         if (res.data.data.qty === 0) {
           deleteOrder.mutate(res.data.data.id);

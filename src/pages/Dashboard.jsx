@@ -8,7 +8,6 @@ import axios from 'axios';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import { Card, CategoryPie, ErrorAnimation, ForecastingChart, IncomeProfit, LoadingAnimation } from '../components';
-import { API_URL } from '../config/apiConfig';
 
 const Dashboard = () => {
   const { numberFormat } = useStateContext();
@@ -17,27 +16,27 @@ const Dashboard = () => {
 
   const fetchDataCard = useMutation({
     mutationFn: (data) => {
-      return axios.post(`${API_URL}/api/dashboard/card`, data);
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, data);
     },
   });
 
   const fetchDataIncomeProfit = useQuery({
     queryKey: ['incomeProfit'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/dashboard/income-profit`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`);
     },
   });
 
   const fetchDataCategory = useMutation({
     mutationFn: (data) => {
-      return axios.post(`${API_URL}/api/dashboard/category`, data);
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, data);
     },
   });
 
   const fetchDataPrediction = useQuery({
     queryKey: ['prediction'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/dashboard/prediction`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`);
     },
   });
 
@@ -57,12 +56,6 @@ const Dashboard = () => {
   if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) return (<LoadingAnimation />);
 
   if (fetchDataCard.isError && fetchDataIncomeProfit.isError && fetchDataCategory.isError && fetchDataPrediction.isError) return (<ErrorAnimation />);
-
-  if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) {
-    console.log('Loading...');
-  } else if (fetchDataCard.isError && fetchDataIncomeProfit.isError && fetchDataCategory.isError && fetchDataPrediction.isError) {
-    console.log('Error...');
-  }
 
   if (fetchDataCard.isSuccess && fetchDataIncomeProfit.isSuccess && fetchDataCategory.isSuccess && fetchDataPrediction.isSuccess) {
     const cardData = fetchDataCard.data.data.data;

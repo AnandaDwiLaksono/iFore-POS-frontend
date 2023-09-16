@@ -8,7 +8,6 @@ import axios from 'axios';
 import moment from 'moment';
 
 import { Header } from '../components';
-import { API_URL } from '../config/apiConfig';
 
 const TransactionHistory = () => {
   const [paymentType, setPaymentType] = useState([]);
@@ -17,14 +16,14 @@ const TransactionHistory = () => {
   const fetchDataTransaction = useQuery({
     queryKey: ['transaction'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/transaction_histories`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/transaction_histories`);
     },
   });
 
   useQuery({
     queryKey: ['paymentType'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/payment_types`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/payment_types`);
     },
     onSuccess: (data) => {
       setPaymentType(data.data.data);
@@ -33,25 +32,25 @@ const TransactionHistory = () => {
 
   const editTransaction = useMutation({
     mutationFn: (data) => {
-      return axios.put(`${API_URL}/api/transaction_histories/${data.id}`, data);
+      return axios.put(`${process.env.REACT_APP_API_URL}/api/transaction_histories/${data.id}`, data);
     }
   });
 
   const deleteTransaction = useMutation({
     mutationFn: (id) => {
-      return axios.delete(`${API_URL}/api/transaction_histories/${id}`);
+      return axios.delete(`${process.env.REACT_APP_API_URL}/api/transaction_histories/${id}`);
     }
   });
 
   const deleteOrderItem = useMutation({
     mutationFn: (id) => {
-      return axios.delete(`${API_URL}/api/order_items/${id}`);
+      return axios.delete(`${process.env.REACT_APP_API_URL}/api/order_items/${id}`);
     }
   });
 
   const updateInventory = useMutation({
     mutationFn: (data) => {
-      return axios.put(`${API_URL}/api/inventories/${data.id}`, data);
+      return axios.put(`${process.env.REACT_APP_API_URL}/api/inventories/${data.id}`, data);
     }
   });
 

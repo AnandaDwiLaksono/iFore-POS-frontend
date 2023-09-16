@@ -3,8 +3,6 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { API_URL } from '../config/apiConfig';
-
 const Profile = () => {
 	const [user, setUser] = useState({});
 	const [categories, setCategories] = useState([]);
@@ -18,7 +16,7 @@ const Profile = () => {
 	useQuery({
 		queryKey: ["user"],
 		queryFn: async () => {
-			return await axios.get(`${API_URL}/api/users`);
+			return await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
 		},
 		onSuccess: (data) => {
 			setUser(data.data.data[0]);
@@ -31,7 +29,7 @@ const Profile = () => {
 	useQuery({
 		queryKey: ["category"],
 		queryFn: async () => {
-			return await axios.get(`${API_URL}/api/categories`);
+			return await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
 		},
 		onSuccess: (data) => {
 			setCategories(data.data.data);
@@ -44,7 +42,7 @@ const Profile = () => {
 	useQuery({
 		queryKey: ["payment"],
 		queryFn: async () => {
-			return await axios.get(`${API_URL}/api/payment_types`);
+			return await axios.get(`${process.env.REACT_APP_API_URL}/api/payment_types`);
 		},
 		onSuccess: (data) => {
 			setPayments(data.data.data);
@@ -56,37 +54,37 @@ const Profile = () => {
 
 	const editProfile = useMutation({
 		mutationFn: async (data) => {
-			return await axios.put(`${API_URL}/api/users/${data.id}`, data);
+			return await axios.put(`${process.env.REACT_APP_API_URL}/api/users/${data.id}`, data);
 		},
 	});
 
 	const editLogo = useMutation({
 		mutationFn: async (data) => {
-			return await axios.put(`${API_URL}/api/users/logo/${user.id}`, {"logo": data});
+			return await axios.put(`${process.env.REACT_APP_API_URL}/api/users/logo/${user.id}`, {"logo": data});
 		},
 	});
 
 	const addCategory = useMutation({
 		mutationFn: async (data) => {
-			return await axios.post(`${API_URL}/api/categories`, data);
+			return await axios.post(`${process.env.REACT_APP_API_URL}/api/categories`, data);
 		},
 	});
 
 	const deleteCategory = useMutation({
 		mutationFn: async (data) => {
-			return await axios.delete(`${API_URL}/api/categories/${data}`);
+			return await axios.delete(`${process.env.REACT_APP_API_URL}/api/categories/${data}`);
 		},
 	});
 
 	const addPayment = useMutation({
 		mutationFn: async (data) => {
-			return await axios.post(`${API_URL}/api/payment_types`, data);
+			return await axios.post(`${process.env.REACT_APP_API_URL}/api/payment_types`, data);
 		},
 	});
 
 	const deletePayment = useMutation({
 		mutationFn: async (data) => {
-			return await axios.delete(`${API_URL}/api/payment_types/${data}`);
+			return await axios.delete(`${process.env.REACT_APP_API_URL}/api/payment_types/${data}`);
 		},
 	});
 

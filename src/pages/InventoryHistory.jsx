@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Header } from '../components';
 import { ColumnDirective, ColumnMenu, ColumnsDirective, Edit, Filter, GridComponent, Group, Page, Reorder, Resize, Search, Selection, Sort, Toolbar } from '@syncfusion/ej2-react-grids';
 import { DateRangePickerComponent, Inject } from '@syncfusion/ej2-react-calendars';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { API_URL } from '../config/apiConfig';
 import { DataManager, Query } from '@syncfusion/ej2-data';
 import moment from 'moment';
+
+import { Header } from '../components';
 
 const InventoryHistory = () => {
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
@@ -14,7 +14,7 @@ const InventoryHistory = () => {
   const fetchDataInventoryHistory = useQuery({
     queryKey: ['inventoryHistory'],
     queryFn: () => {
-      return axios.get(`${API_URL}/api/inventory_histories`);
+      return axios.get(`${process.env.REACT_APP_API_URL}/api/inventory_histories`);
     },
   });
 
