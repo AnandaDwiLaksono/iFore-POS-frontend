@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import moment from 'moment';
 
-import { Header } from '../components';
+import { ErrorAnimation, Header, LoadingAnimation } from '../components';
 
 const TransactionHistory = () => {
   const [paymentType, setPaymentType] = useState([]);
@@ -112,7 +112,11 @@ const TransactionHistory = () => {
     toast.success('Transaction deleted successfully');
   }
 
-  if (!fetchDataTransaction.isLoading) {
+  if (fetchDataTransaction.isLoading) return (<LoadingAnimation />);
+
+  if (fetchDataTransaction.isError) return (<ErrorAnimation />);
+
+  if (fetchDataTransaction.isSuccess) {
     const dataTransaction = fetchDataTransaction.data.data.data;
     
     const formattedDate = (date) => {

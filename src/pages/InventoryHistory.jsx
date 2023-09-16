@@ -6,7 +6,7 @@ import axios from 'axios';
 import { DataManager, Query } from '@syncfusion/ej2-data';
 import moment from 'moment';
 
-import { Header } from '../components';
+import { ErrorAnimation, Header, LoadingAnimation } from '../components';
 
 const InventoryHistory = () => {
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
@@ -18,7 +18,11 @@ const InventoryHistory = () => {
     },
   });
 
-  if (!fetchDataInventoryHistory.isLoading) {
+  if (fetchDataInventoryHistory.isLoading) return (<LoadingAnimation />);
+
+  if (fetchDataInventoryHistory.isError) return (<ErrorAnimation />);
+
+  if (fetchDataInventoryHistory.isSuccess) {
     const dataInventoryHistory = fetchDataInventoryHistory.data.data.data;
 
     const formattedDate = (date) => {

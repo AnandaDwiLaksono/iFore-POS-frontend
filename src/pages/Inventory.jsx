@@ -5,7 +5,7 @@ import { DataManager, Query } from '@syncfusion/ej2-data';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { Header } from '../components';
+import { ErrorAnimation, Header, LoadingAnimation } from '../components';
 import { useStateContext } from '../contexts/ContextProvider';
 
 const Inventory = () => {
@@ -147,8 +147,12 @@ const Inventory = () => {
     
     toast.success(`Item named ${newInventory.name} has been edited!`);
   };
+
+  if (fetchInventories.isLoading) return (<LoadingAnimation />);
+
+  if (fetchInventories.isError) return (<ErrorAnimation />);
   
-  if (!fetchInventories.isLoading) {
+  if (fetchInventories.isSuccess) {
     const inventories = fetchInventories.data.data.data.sort((a, b) => a.name.localeCompare(b.name));
     const dataInventories = new DataManager(inventories);
 
