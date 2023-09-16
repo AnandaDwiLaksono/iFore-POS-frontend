@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-// import { SiShopware } from 'react-icons/si';
 import { AiOutlineCalendar, AiOutlineHistory } from 'react-icons/ai';
 import { BsKanban } from 'react-icons/bs';
 import { RxDashboard } from 'react-icons/rx';
-import { MdOutlineInventory2 } from 'react-icons/md';
+import { MdOutlineInventory, MdOutlineInventory2 } from 'react-icons/md';
 import { IoCartOutline } from 'react-icons/io5'
 import { GrClose } from 'react-icons/gr';
 
@@ -36,6 +35,10 @@ const menus = [
       {
         name: 'inventory',
         icon: <MdOutlineInventory2 />
+      },
+      {
+        name: 'inventory history',
+        icon: <MdOutlineInventory />
       }
     ],
   },
@@ -74,7 +77,6 @@ const Sidebar = () => {
             onClick={handleCloseSideBar}
             className='items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900'
           >
-            {/* <SiShopware /> <span>iFORE</span> */}
             <img src={logo} alt='logo' className='w-10 h-10' /> <span>iFORE</span>
           </Link>
           <TooltipComponent content='Menu' position='BottomCenter'>

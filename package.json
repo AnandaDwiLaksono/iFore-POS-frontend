@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "@syncfusion/ej2": "^20.4.52",
     "@syncfusion/ej2-base": "^20.4.51",
     "@syncfusion/ej2-react-calendars": "^20.4.52",

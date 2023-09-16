@@ -7,3 +7,4 @@ export { default as SignUp } from './SignUp';
 export { default as SignIn } from './SignIn';
 export { default as Transaction } from './Transaction';
 export { default as Profile } from './Profile';
+export { default as InventoryHistory } from './InventoryHistory';

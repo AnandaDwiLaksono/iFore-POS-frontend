@@ -2,7 +2,7 @@ import { ChartComponent, DateTime, Highlight, Inject, LineSeries, SeriesCollecti
 import React from 'react'
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const ForecastingChart = ({ id, data, label, interval, title, header }) => {
+const ForecastingChart = ({ id, data, label, title, header }) => {
   const { currentMode } = useStateContext();
 
   const linePrimaryXAxis = {
@@ -19,7 +19,6 @@ const ForecastingChart = ({ id, data, label, interval, title, header }) => {
   const linePrimaryYAxis = {
     labelFormat: label,
     lineStyle: { width: 0 },
-    interval: interval,
     majorTickLines: { width: 0 },
     minorTickLines: { width: 0 },
     majorGridLines: { dashArray: '5,5', color: currentMode === 'Dark' ? '#20232a' : '#ededed' },

@@ -75,7 +75,6 @@ const Navbar = () => {
             position='BottomCenter'
           >
             <div className='flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg'
-              // onClick={() => setIsClicked(true)}
             >
               <img className='rounded-full w-8 h-8 shadow-md'
                 src={user.logo}
@@ -84,11 +83,8 @@ const Navbar = () => {
               <p className='text-gray-400 text-14 font-bold ml-1'>
                 {user.name}
               </p>
-              {/* <MdKeyboardArrowDown className='text-gray-400 text-14' /> */}
             </div>
           </TooltipComponent>
-
-          {/* {isClicked && <UserProfile />} */}
         </div>
       </Link>
     </div>

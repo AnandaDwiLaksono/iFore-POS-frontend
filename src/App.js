@@ -2,12 +2,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiSettings } from 'react-icons/fi';
 import { ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
-import 'react-toastify/dist/ReactToastify.css';
 import { Navbar, Sidebar, ThemeSettings} from './components';
 import { useStateContext } from './contexts/ContextProvider';
-import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory, Profile } from './pages';
+import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory, Profile, InventoryHistory } from './pages';
 
 function App() {
   const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } = useStateContext();
@@ -32,11 +32,13 @@ function App() {
               </TooltipComponent>
             </div>
           )}
+
           {showNavbarAndSidebar && (
             <div className={activeMenu ? 'w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white m-4 rounded-lg' : 'w-0 dark:bg-secondary-dark-bg'}>
               <Sidebar />
             </div>
           )}
+          
           <div className={`dark:bg-main-dark-bg bg-main-bg min-h-screen w-full ${showNavbarAndSidebar ? (activeMenu ? 'md:ml-72' : 'flex-2') : ''}`}>
             {showNavbarAndSidebar && (
               <div className='fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full'>
@@ -60,6 +62,7 @@ function App() {
                 <Route path='/inventory' element={<Inventory />} />
                 <Route path='/transaction history' element={<TransactionHistory />} />
                 <Route path='/transaction' element={<Transaction />} />
+                <Route path='/inventory history' element={<InventoryHistory />} />
 
                 {/* Apps */}
                 <Route path='/calendar' element={<Calendar />} />
@@ -72,6 +75,7 @@ function App() {
           </div>
         </div>
       </BrowserRouter>
+
       <ToastContainer
         position="top-right"
         autoClose={2000}
