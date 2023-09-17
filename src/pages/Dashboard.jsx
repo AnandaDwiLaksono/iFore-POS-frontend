@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaMoneyBillWaveAlt, FaWallet } from 'react-icons/fa';
-import { BiCategory } from 'react-icons/bi';
+import { BiCategory, BiFilterAlt } from 'react-icons/bi';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import { Card, CategoryPie, ErrorAnimation, ForecastingChart, IncomeProfit, LoadingAnimation } from '../components';
@@ -13,6 +14,7 @@ const Dashboard = () => {
   const { numberFormat } = useStateContext();
 
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
 
   const fetchDataCard = useMutation({
     mutationFn: (data) => {
@@ -20,10 +22,9 @@ const Dashboard = () => {
     },
   });
 
-  const fetchDataIncomeProfit = useQuery({
-    queryKey: ['incomeProfit'],
-    queryFn: () => {
-      return axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`);
+  const fetchDataIncomeProfit = useMutation({
+    mutationFn: (data) => {
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, data);
     },
   });
 
@@ -50,8 +51,16 @@ const Dashboard = () => {
       fetchDataCard.mutate(data);
       fetchDataCategory.mutate(data);
     };
+
+    if (selectedCategory) {
+      const data = {
+        categories: selectedCategory,
+      };
+
+      fetchDataIncomeProfit.mutate(data);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate]);
+  }, [selectedDate, selectedCategory]);
 
   if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) return (<LoadingAnimation />);
 
@@ -60,8 +69,16 @@ const Dashboard = () => {
   if (fetchDataCard.isSuccess && fetchDataIncomeProfit.isSuccess && fetchDataCategory.isSuccess && fetchDataPrediction.isSuccess) {
     const cardData = fetchDataCard.data.data.data;
     const incomeProfitData = fetchDataIncomeProfit.data.data.data;
-    const categoryData1 = fetchDataCategory.data.data.data;
+    const categoryData = fetchDataCategory.data.data.data;
     const predictionData = fetchDataPrediction.data.data.data;
+
+    console.log(categoryData)
+
+    const categories = categoryData.map(item => item.name);
+
+    console.log(categories)
+    console.log(selectedCategory.length)
+    console.log(selectedCategory)
 
     const formattedDate = (date) => {
       const newDate = new Date(date);
@@ -117,8 +134,19 @@ const Dashboard = () => {
           <div className='pl-6 pt-6 w-full lg:w-3/5'>
             <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
               <div className='p-4'>
-                <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-                  Income & Profit Overview
+                <div className='flex justify-between items-center'>
+                  <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
+                    Income & Profit Overview
+                  </div>
+                  <div className='w-1/3 flex text-2xl gap-2 text-black text-opacity-50'>
+                    <BiFilterAlt />
+                    <MultiSelectComponent
+                      id="mtselement"
+                      dataSource={categories}
+                      placeholder="Filter category"
+                      onChange={(e) => setSelectedCategory(e.value)}
+                    />
+                  </div>
                 </div>
                 <div className='w-full'>
                   <IncomeProfit
@@ -137,7 +165,7 @@ const Dashboard = () => {
                   Sales by Category
                 </div>
                 <div className='w-full'>
-                  <CategoryPie data={categoryData1} />
+                  <CategoryPie data={categoryData} />
                 </div>
               </div>
             </div>

@@ -14,14 +14,13 @@ const IncomeProfit = ({ dataIncome, dataProfit, date }) => {
     intervalType: 'Days',
     edgeLabelPlacement: 'Shift',
     labelStyle: { color: 'gray' },
-    minimum: moment(date[0]).isSame(date[2]) ? new Date(moment().subtract(7, 'days')) : new Date(date[0]),
+    minimum: moment(date[0]).isSame(date[2]) ? new Date(moment().subtract(7, 'days')) : new Date(moment(date[1]).subtract(1, 'days')),
     maximum: new Date(moment(date[1]).add(2, 'days')),
   };
   
   const areaPrimaryYAxis = {
     labelFormat: 'Rp {value}',
     lineStyle: { width: 0 },
-    // interval: 500000,
     majorTickLines: { width: 0 },
     minorTickLines: { width: 0 },
     majorGridLines: { dashArray: '5,5', color: currentMode === 'Dark' ? '#20232a' : '#ededed' },
