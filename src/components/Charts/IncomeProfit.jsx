@@ -14,7 +14,7 @@ const IncomeProfit = ({ dataIncome, dataProfit, date }) => {
     intervalType: 'Days',
     edgeLabelPlacement: 'Shift',
     labelStyle: { color: 'gray' },
-    minimum: moment(date[0]).isSame(date[2]) ? new Date(moment().subtract(7, 'days')) : new Date(moment(date[1]).subtract(1, 'days')),
+    minimum: moment(date[0]).isSame(date[2]) ? new Date(moment().subtract(7, 'days')) : new Date(moment(date[0]).subtract(1, 'days')),
     maximum: new Date(moment(date[1]).add(2, 'days')),
   };
   

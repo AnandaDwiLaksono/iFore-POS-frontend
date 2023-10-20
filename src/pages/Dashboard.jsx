@@ -134,11 +134,11 @@ const Dashboard = () => {
           <div className='pl-6 pt-6 w-full lg:w-3/5'>
             <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
               <div className='p-4'>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center flex-wrap'>
                   <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
                     Income & Profit Overview
                   </div>
-                  <div className='w-1/3 flex text-2xl gap-2 text-black text-opacity-50'>
+                  <div className='sm:w-1/3 w-4/5 flex text-2xl gap-2 text-black text-opacity-50 dark:text-gray-300'>
                     <BiFilterAlt />
                     <MultiSelectComponent
                       id="mtselement"

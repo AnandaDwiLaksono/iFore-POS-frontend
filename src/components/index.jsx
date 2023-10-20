@@ -17,3 +17,4 @@ export { default as ForecastingChart } from './Charts/ForecastingChart';
 export { default as Card } from './Card';
 export { default as LoadingAnimation } from './Animation/LoadingAnimation';
 export { default as ErrorAnimation } from './Animation/ErrorAnimation';
+export { default as ModalCustomer } from './ModalCustomer';

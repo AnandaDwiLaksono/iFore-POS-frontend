@@ -41,37 +41,35 @@ function App() {
           
           <div className={`dark:bg-main-dark-bg bg-main-bg min-h-screen w-full ${showNavbarAndSidebar ? (activeMenu ? 'md:ml-72' : 'flex-2') : ''}`}>
             {showNavbarAndSidebar && (
-              <div className='fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full'>
+              <div className='static bg-main-bg dark:bg-main-dark-bg w-full'>
                 <Navbar />
               </div>
             )}
 
-            <div className='mt-[60px] md:mt-0'>
-              {themeSettings && <ThemeSettings />}
+            {themeSettings && <ThemeSettings />}
 
-              <Routes>
-                {/* Authentication */}
-                {/* <Route path='/auth/register' element={<SignUp />} />
-                <Route path='/auth/login' element={<SignIn />} /> */}
+            <Routes>
+              {/* Authentication */}
+              {/* <Route path='/auth/register' element={<SignUp />} />
+              <Route path='/auth/login' element={<SignIn />} /> */}
 
-                {/* Dashboard */}
-                <Route path='/' element={<Dashboard />} />
-                <Route path='/dashboard' element={<Dashboard />} />
+              {/* Dashboard */}
+              <Route path='/' element={<Dashboard />} />
+              <Route path='/dashboard' element={<Dashboard />} />
 
-                {/* Pages */}
-                <Route path='/inventory' element={<Inventory />} />
-                <Route path='/transaction history' element={<TransactionHistory />} />
-                <Route path='/transaction' element={<Transaction />} />
-                <Route path='/inventory history' element={<InventoryHistory />} />
+              {/* Pages */}
+              <Route path='/inventory' element={<Inventory />} />
+              <Route path='/transaction history' element={<TransactionHistory />} />
+              <Route path='/transaction' element={<Transaction />} />
+              <Route path='/inventory history' element={<InventoryHistory />} />
 
-                {/* Apps */}
-                <Route path='/calendar' element={<Calendar />} />
-                <Route path='/kanban' element={<Kanban />} />
+              {/* Apps */}
+              <Route path='/calendar' element={<Calendar />} />
+              <Route path='/kanban' element={<Kanban />} />
 
-                {/* Profile */}
-                <Route path='/profile' element={<Profile />} />
-              </Routes>
-            </div>
+              {/* Profile */}
+              <Route path='/profile' element={<Profile />} />
+            </Routes>
           </div>
         </div>
       </BrowserRouter>
