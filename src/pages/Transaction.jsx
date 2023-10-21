@@ -14,7 +14,7 @@ import { useStateContext } from '../contexts/ContextProvider';
 import { AddOrderList, ModalCustomer } from '../components';
 
 const Transaction = () => {
-  const { addOrderList, setAddOrderList, itemData, setItemData, numberFormat, currentColor, setOnOrder } = useStateContext();
+  const { addOrderList, setAddOrderList, itemData, setItemData, numberFormat, currentColor, setOnOrder, dataCustomer, setDataCustomer } = useStateContext();
 
   const [inventories, setInventories] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -54,6 +54,12 @@ const Transaction = () => {
       return axios.put(`${process.env.REACT_APP_API_URL}/api/inventories/${newDataInventory.id}`, newDataInventory);
     },
   });
+
+  const addInventoryHistory = useMutation({
+    mutationFn: (dataInventoryHistory) => {
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/inventory_histories`, dataInventoryHistory);
+    }
+  });
   
   const handleGetOrder = (item) => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/order_items/${item.id}`)
@@ -83,6 +89,7 @@ const Transaction = () => {
     });
 
     setOrderList([]);
+    setDataCustomer(null);
     toast.success('Order list deleted successfully');
   }
 
@@ -98,7 +105,15 @@ const Transaction = () => {
         note: orderList[i].inventory.note
       };
 
+      const dataInventoryHistory = {
+        item_id: orderList[i].item_id,
+        change_type: 'out',
+        quantity: orderList[i].qty,
+        note: orderList[i].inventory.note
+      };
+
       editInventory.mutate(dataInventory);
+      addInventoryHistory.mutate(dataInventoryHistory);
     };
 
     const dataTransaction = {
@@ -109,12 +124,14 @@ const Transaction = () => {
       total_discount: totalDiscount,
       total: subTotal - totalDiscount,
       total_profit: orderList.reduce((acc, curr) => acc + curr.profit, 0),
-      note: ''
+      note: '',
+      customer_id: dataCustomer?.id,
     };
 
     addTransaction.mutate(dataTransaction);
 
     setOrderList([]);
+    setDataCustomer(null);
     toast.success('Transaction added successfully');
   };
 
@@ -275,7 +292,7 @@ const Transaction = () => {
               Customer:
             </div>
             <div className='text-right font-semibold w-full sm:w-5/12'>
-              Ananda Dwi Laksono
+              {dataCustomer !== null ? dataCustomer.name : ''}
             </div>
           </div>
           <div className='flex flex-row px-3 py-2 mt-4'>
@@ -319,6 +336,7 @@ const Transaction = () => {
           <button
             className='bg-green-500 text-white text-center text-xl font-bold py-3 rounded-b-lg w-full hover:bg-green-400 mt-4'
             onClick={handleAddTransaction}
+            disabled={orderList.length === 0}
           >
             Rp {numberFormat.format(subTotal - totalDiscount)}
           </button>

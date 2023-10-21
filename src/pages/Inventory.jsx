@@ -132,7 +132,16 @@ const Inventory = () => {
     }
   });
 
-  const handleEditInventory = (newInventory) => {
+  const addInventoryHistory = useMutation({
+    mutationFn: (newDataInventoryHistory) => {
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/inventory_histories`, newDataInventoryHistory);
+    },
+  });
+
+  const handleEditInventory = (newInventory, qtyOld) => {
+    console.log(newInventory);
+    console.log(qtyOld);
+
     const data = {
       id: newInventory.id,
       name: newInventory.name,
@@ -142,6 +151,17 @@ const Inventory = () => {
       qty_stock: newInventory.qty_stock,
       note: newInventory.note === undefined ? '' : newInventory.note
     };
+
+    if (qtyOld !== newInventory.qty_stock) {
+      const InventoryHistory = {
+        item_id: newInventory.id,
+        change_type: qtyOld > newInventory.qty_stock ? 'out' : 'in',
+        quantity: newInventory.qty_stock,
+        note: qtyOld > newInventory.qty_stock ? 'Reduce item' : 'Add item'
+      }
+
+      addInventoryHistory.mutate(InventoryHistory);
+    }
 
     editInventory.mutate(data);
     
@@ -169,7 +189,19 @@ const Inventory = () => {
           note: newInventory.note === undefined ? '' : newInventory.note
         };
     
-        addInventory.mutate(data);
+        addInventory.mutate(data, {
+          onSuccess: (data) => {
+            const newDataInventoryHistory = {
+              item_id: data.data.data.id,
+              change_type: 'in',
+              quantity: data.data.data.qty_stock,
+              note: 'Add new item'
+            };
+    
+            addInventoryHistory.mutate(newDataInventoryHistory);
+          }
+        });
+        
         toast.success(`Item named ${newInventory.name} has been added!`);
       };
     };
@@ -208,7 +240,7 @@ const Inventory = () => {
               }
 
               if (args.action === 'edit') {
-                handleEditInventory(args.data);
+                handleEditInventory(args.data, args.previousData.qty_stock);
               }
             }
 

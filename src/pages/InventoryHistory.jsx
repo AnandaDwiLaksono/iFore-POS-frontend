@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ColumnDirective, ColumnMenu, ColumnsDirective, Edit, Filter, GridComponent, Group, Page, Reorder, Resize, Search, Selection, Sort, Toolbar } from '@syncfusion/ej2-react-grids';
 import { DateRangePickerComponent, Inject } from '@syncfusion/ej2-react-calendars';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { DataManager, Query } from '@syncfusion/ej2-data';
 import moment from 'moment';
@@ -17,6 +17,35 @@ const InventoryHistory = () => {
       return axios.get(`${process.env.REACT_APP_API_URL}/api/inventory_histories`);
     },
   });
+
+  const editInventoryHistory = useMutation({
+    mutationFn: (data) => {
+      return axios.put(`${process.env.REACT_APP_API_URL}/api/inventory_histories/${data.id}`, data);
+    },
+    onSuccess: () => {
+      fetchDataInventoryHistory.refetch();
+    },
+  });
+
+  const deleteInventoryHistory = useMutation({
+    mutationFn: (id) => {
+      return axios.delete(`${process.env.REACT_APP_API_URL}/api/inventory_histories/${id}`);
+    },
+    onSuccess: () => {
+      fetchDataInventoryHistory.refetch();
+    },
+  });
+
+  const handleEditInventoryHistory = (data) => {
+    const newData = {
+      item_id: data.item_id,
+      change_type: data.change_type,
+      quantity: data.quantity,
+      note: data.note === undefined ? '' : data.note
+    };
+
+    editInventoryHistory.mutate(newData);
+  };
 
   if (fetchDataInventoryHistory.isLoading) return (<LoadingAnimation />);
 
@@ -139,6 +168,19 @@ const InventoryHistory = () => {
               field: 'createdAt',
               direction: 'Descending'
             }]
+          }}
+          actionComplete={(args) => {
+            if (args.requestType === 'save') {
+              if (args.action === 'edit') {
+                handleEditInventoryHistory(args.data);
+              }
+            }
+
+            if (args.requestType === 'delete') {
+              args.data.forEach((item) => {
+                deleteInventoryHistory.mutate(item.id);
+              });    
+            }
           }}
         >
           <ColumnsDirective>

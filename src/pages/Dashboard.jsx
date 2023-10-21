@@ -72,13 +72,7 @@ const Dashboard = () => {
     const categoryData = fetchDataCategory.data.data.data;
     const predictionData = fetchDataPrediction.data.data.data;
 
-    console.log(categoryData)
-
     const categories = categoryData.map(item => item.name);
-
-    console.log(categories)
-    console.log(selectedCategory.length)
-    console.log(selectedCategory)
 
     const formattedDate = (date) => {
       const newDate = new Date(date);

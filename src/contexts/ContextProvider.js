@@ -21,6 +21,7 @@ export const ContextProvider = ({ children }) => {
     const [icon, setIcon] = useState(true);
     const orderId = [];
     const [onOrder, setOnOrder] = useState(false);
+    const [dataCustomer, setDataCustomer] = useState(null);
 
     const handleClick = (clicked) => {
         setIsClicked({ ...initialState, [clicked]: true });
@@ -77,6 +78,8 @@ export const ContextProvider = ({ children }) => {
             orderId,
             setOnOrder,
             onOrder,
+            dataCustomer,
+            setDataCustomer
         }}>
             {children}
         </StateContext.Provider>

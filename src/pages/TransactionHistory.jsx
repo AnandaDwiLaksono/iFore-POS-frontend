@@ -54,6 +54,12 @@ const TransactionHistory = () => {
     }
   });
 
+  const addInventoryHistory = useMutation({
+    mutationFn: (data) => {
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/inventory_histories`, data);
+    }
+  });
+
   const handleEditTransaction = (data) => {
     console.log(data)
     const dataPayload = {
@@ -79,7 +85,15 @@ const TransactionHistory = () => {
           note: item.inventory.note
         }
 
+        const inventoryHistory = {
+          item_id: item.item_id,
+          change_type: 'in',
+          quantity: item.qty,
+          note: `Cancel Transaction ID: ${data.id}`
+        }
+
         updateInventory.mutate(inventory);
+        addInventoryHistory.mutate(inventoryHistory);
       });
     }
 
@@ -101,9 +115,16 @@ const TransactionHistory = () => {
           note: orderItem.inventory.note
         }
 
+        const inventoryHistory = {
+          item_id: orderItem.item_id,
+          change_type: 'in',
+          quantity: orderItem.qty,
+          note: `Delete Transaction ID: ${item.id}`
+        }
+
         updateInventory.mutate(inventory);
-        
         deleteOrderItem.mutate(orderItem.id);
+        addInventoryHistory.mutate(inventoryHistory);
       });
 
       deleteTransaction.mutate(item.id);
@@ -248,6 +269,14 @@ const TransactionHistory = () => {
         allowEditing: false
       },
       {
+        headerText: 'Customer Name',
+        field: 'customer.name',
+        width: '100',
+        textAlign: 'Center',
+        allowEditing: false,
+        visible: false
+      },
+      {
         field: 'payment_type.name',
         headerText: 'Payment Type',
         textAlign: 'Center',
@@ -359,7 +388,7 @@ const TransactionHistory = () => {
       ]
     };
 
-    console.log(selectedDate)
+    console.log(transactionData);
 
     return (
       <div className='m-2 md:m-10 p-2 md:p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl'>
