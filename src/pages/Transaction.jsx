@@ -109,7 +109,7 @@ const Transaction = () => {
         item_id: orderList[i].item_id,
         change_type: 'out',
         quantity: orderList[i].qty,
-        note: orderList[i].inventory.note
+        note: 'Sale'
       };
 
       editInventory.mutate(dataInventory);
@@ -190,7 +190,7 @@ const Transaction = () => {
                 <button
                   type='button' 
                   className='p-1 text-lg hover:drop-shadow-xl text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-500 rounded-full border border-gray-400' 
-                  onClick={()=>document.getElementById('my_modal_3').showModal()}
+                  onClick={() => document.getElementById('my_modal_3').showModal()}
                 >
                   <TiUserAdd />
                 </button>

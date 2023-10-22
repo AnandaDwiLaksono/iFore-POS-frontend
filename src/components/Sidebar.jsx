@@ -7,6 +7,7 @@ import { RxDashboard } from 'react-icons/rx';
 import { MdOutlineInventory, MdOutlineInventory2 } from 'react-icons/md';
 import { IoCartOutline } from 'react-icons/io5'
 import { GrClose } from 'react-icons/gr';
+import { HiOutlineUsers } from 'react-icons/hi';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import logo from '../assets/img/logoiFORE.png';
@@ -39,7 +40,11 @@ const menus = [
       {
         name: 'inventory history',
         icon: <MdOutlineInventory />
-      }
+      },
+      {
+        name: 'customer',
+        icon: <HiOutlineUsers />
+      },
     ],
   },
   {

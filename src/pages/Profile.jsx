@@ -345,6 +345,7 @@ const Profile = () => {
 									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={categories.map(category => category.name).join(', ')}
 									onChange={handleChangeCategory}
+									disabled
 								/>
 							</div>
 							<label
@@ -358,6 +359,7 @@ const Profile = () => {
 									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={payments.map(payment => payment.name).join(', ')}
 									onChange={handleChangePayment}
+									disabled
 								/>
 							</div>
 							<div className='p-4 text-right'>

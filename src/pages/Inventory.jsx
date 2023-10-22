@@ -123,14 +123,14 @@ const Inventory = () => {
     },
   });
 
-  const deleteInventory = useMutation({
-    mutationFn: (idInventory) => {
-      return axios.delete(`${process.env.REACT_APP_API_URL}/api/inventories/${idInventory}`);
-    },
-    onSuccess: () => {
-      toast.success('Item deleted successfully');
-    }
-  });
+  // const deleteInventory = useMutation({
+  //   mutationFn: (idInventory) => {
+  //     return axios.delete(`${process.env.REACT_APP_API_URL}/api/inventories/${idInventory}`);
+  //   },
+  //   onSuccess: () => {
+  //     toast.success('Item deleted successfully');
+  //   }
+  // });
 
   const addInventoryHistory = useMutation({
     mutationFn: (newDataInventoryHistory) => {
@@ -219,9 +219,9 @@ const Inventory = () => {
           showColumnMenu
           allowTextWrap
           enableStickyHeader
-          toolbar={['Search', 'Add', 'Edit', 'Delete']}
+          toolbar={['Search', 'Add', 'Edit']}
           editSettings={{
-            allowDeleting: true,
+            // allowDeleting: true,
             allowEditing: true,
             allowAdding: true,
             mode: 'Dialog'
@@ -244,11 +244,11 @@ const Inventory = () => {
               }
             }
 
-            if (args.requestType === 'delete') {
-              args.data.forEach((item) => {
-                deleteInventory.mutate(item.id);
-              });    
-            }
+            // if (args.requestType === 'delete') {
+            //   args.data.forEach((item) => {
+            //     deleteInventory.mutate(item.id);
+            //   });    
+            // }
           }}
         >
           <ColumnsDirective>

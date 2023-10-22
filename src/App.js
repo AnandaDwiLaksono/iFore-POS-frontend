@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import { Navbar, Sidebar, ThemeSettings} from './components';
 import { useStateContext } from './contexts/ContextProvider';
-import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory, Profile, InventoryHistory } from './pages';
+import { Calendar, Dashboard, Inventory, Kanban, Transaction, TransactionHistory, Profile, InventoryHistory, Customer } from './pages';
 
 function App() {
   const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } = useStateContext();
@@ -62,6 +62,7 @@ function App() {
               <Route path='/transaction history' element={<TransactionHistory />} />
               <Route path='/transaction' element={<Transaction />} />
               <Route path='/inventory history' element={<InventoryHistory />} />
+              <Route path='/customer' element={<Customer />} />
 
               {/* Apps */}
               <Route path='/calendar' element={<Calendar />} />

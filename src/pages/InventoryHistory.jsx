@@ -27,14 +27,14 @@ const InventoryHistory = () => {
     },
   });
 
-  const deleteInventoryHistory = useMutation({
-    mutationFn: (id) => {
-      return axios.delete(`${process.env.REACT_APP_API_URL}/api/inventory_histories/${id}`);
-    },
-    onSuccess: () => {
-      fetchDataInventoryHistory.refetch();
-    },
-  });
+  // const deleteInventoryHistory = useMutation({
+  //   mutationFn: (id) => {
+  //     return axios.delete(`${process.env.REACT_APP_API_URL}/api/inventory_histories/${id}`);
+  //   },
+  //   onSuccess: () => {
+  //     fetchDataInventoryHistory.refetch();
+  //   },
+  // });
 
   const handleEditInventoryHistory = (data) => {
     const newData = {
@@ -110,6 +110,7 @@ const InventoryHistory = () => {
             query: new Query()
           }
         },
+        allowEditing: false
       },
       {
         field: 'quantity',
@@ -117,7 +118,8 @@ const InventoryHistory = () => {
         width: '100',
         textAlign: 'Center',
         editType: 'numericedit',
-        format: 'N'
+        format: 'N',
+        allowEditing: false
       },
       {
         field: 'note',
@@ -150,10 +152,11 @@ const InventoryHistory = () => {
           allowReordering
           showColumnMenu
           allowTextWrap
+          allowGrouping
           enableStickyHeader
-          toolbar={['Search', 'Edit', 'Delete']}
+          toolbar={['Search', 'Edit']}
           editSettings={{
-            allowDeleting: true,
+            // allowDeleting: true,
             allowEditing: true,
             mode: 'Dialog'
           }}
@@ -176,11 +179,11 @@ const InventoryHistory = () => {
               }
             }
 
-            if (args.requestType === 'delete') {
-              args.data.forEach((item) => {
-                deleteInventoryHistory.mutate(item.id);
-              });    
-            }
+            // if (args.requestType === 'delete') {
+            //   args.data.forEach((item) => {
+            //     deleteInventoryHistory.mutate(item.id);
+            //   });    
+            // }
           }}
         >
           <ColumnsDirective>
