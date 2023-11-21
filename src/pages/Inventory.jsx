@@ -156,7 +156,7 @@ const Inventory = () => {
       const InventoryHistory = {
         item_id: newInventory.id,
         change_type: qtyOld > newInventory.qty_stock ? 'out' : 'in',
-        quantity: newInventory.qty_stock,
+        quantity: Math.abs(newInventory.qty_stock - qtyOld),
         note: qtyOld > newInventory.qty_stock ? 'Reduce item' : 'Add item'
       }
 
