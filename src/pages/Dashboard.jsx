@@ -81,9 +81,9 @@ const Dashboard = () => {
   );
   
   const { data: predictionData, isLoading: predictionLoading, isError: predictionError } = useQuery(
-    'prediction',
+    ['prediction'],
     () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
-    { enabled: true }
+    { enabled: false }
   );
 
   const formattedDate = useCallback((date) => {
