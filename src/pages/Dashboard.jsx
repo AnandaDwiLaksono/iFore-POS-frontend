@@ -80,7 +80,7 @@ const Dashboard = () => {
     { enabled: selectedDate !== null }
   );
   
-  const { data: predictionData, isLoading: predictionLoading, isError: predictionError } = useQuery(
+  const { data: predictionData, isLoading: predictionLoading, isError: predictionError, refetch:refetchPrediction } = useQuery(
     ['prediction'],
     () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
     { enabled: false }
@@ -105,7 +105,11 @@ const Dashboard = () => {
     if (selectedCategory) {
       refetchIncomeProfit();
     }
-  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit]);
+
+    if (predictionData) {
+      refetchPrediction();
+    }
+  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, predictionData, refetchPrediction]);
 
   // if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) return (<LoadingAnimation />);
 
