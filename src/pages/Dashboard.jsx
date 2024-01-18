@@ -62,25 +62,25 @@ const Dashboard = () => {
   // // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [selectedDate, selectedCategory]);
 
-  const { data: cardData, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
+  const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
     ['card', selectedDate],
     () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
     { enabled: selectedDate !== null }
   );
   
-  const { data: incomeProfitData, isLoading: incomeProfitLoading, isError: incomeProfitError, refetch: refetchIncomeProfit } = useQuery(
+  const { data: dataIncomeProfit, isLoading: incomeProfitLoading, isError: incomeProfitError, refetch: refetchIncomeProfit } = useQuery(
     ['incomeProfit', selectedCategory],
     () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, { categories: selectedCategory }),
     { enabled: selectedCategory !== null }
   );
   
-  const { data: categoryData, isLoading: categoryLoading, isError: categoryError, refetch: refetchCategory } = useQuery(
+  const { data: dataCategory, isLoading: categoryLoading, isError: categoryError, refetch: refetchCategory } = useQuery(
     ['category', selectedDate],
     () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
     { enabled: selectedDate !== null }
   );
   
-  const { data: predictionData, isLoading: predictionLoading, isError: predictionError, refetch:refetchPrediction } = useQuery(
+  const { data: dataPrediction, isLoading: predictionLoading, isError: predictionError, refetch:refetchPrediction } = useQuery(
     ['prediction'],
     () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
     { enabled: true }
@@ -96,8 +96,6 @@ const Dashboard = () => {
     return `${year}-${month}-${day}`;
   }, []);
 
-  console.log(predictionData);
-
   useEffect(() => {
     if (selectedDate) {
       refetchCard();
@@ -108,10 +106,10 @@ const Dashboard = () => {
       refetchIncomeProfit();
     }
 
-    if (!predictionData) {
+    if (!dataPrediction) {
       refetchPrediction();
     }
-  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, predictionData, refetchPrediction]);
+  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, refetchPrediction, dataPrediction]);
 
   // if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) return (<LoadingAnimation />);
 
@@ -127,7 +125,12 @@ const Dashboard = () => {
 
   if (cardError || incomeProfitError || categoryError || predictionError) return (<ErrorAnimation />);
 
-  if (cardData && incomeProfitData && categoryData && predictionData) {
+  if (dataCard && dataIncomeProfit && dataCategory && dataPrediction) {
+      const cardData = dataCard.data.data.data;
+      const incomeProfitData = dataIncomeProfit.data.data.data;
+      const categoryData = dataCategory.data.data.data;
+      const predictionData = dataPrediction.data.data.data;
+
     const categories = categoryData.map(item => item.name);
 
     // const formattedDate = (date) => {
