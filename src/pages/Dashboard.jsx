@@ -16,52 +16,6 @@ const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
   const [selectedCategory, setSelectedCategory] = useState([]);
 
-  // const fetchDataCard = useMutation({
-  //   mutationFn: (data) => {
-  //     return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, data);
-  //   },
-  // });
-
-  // const fetchDataIncomeProfit = useMutation({
-  //   mutationFn: (data) => {
-  //     return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, data);
-  //   },
-  // });
-
-  // const fetchDataCategory = useMutation({
-  //   mutationFn: (data) => {
-  //     return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, data);
-  //   },
-  // });
-
-  // const fetchDataPrediction = useQuery({
-  //   queryKey: ['prediction'],
-  //   queryFn: () => {
-  //     return axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`);
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   if (selectedDate) {
-  //     const data = {
-  //       startDate: selectedDate[0],
-  //       endDate: selectedDate[1],
-  //     };
-
-  //     fetchDataCard.mutate(data);
-  //     fetchDataCategory.mutate(data);
-  //   };
-
-  //   if (selectedCategory) {
-  //     const data = {
-  //       categories: selectedCategory,
-  //     };
-
-  //     fetchDataIncomeProfit.mutate(data);
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedDate, selectedCategory]);
-
   const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
     ['card', selectedDate],
     () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
@@ -111,16 +65,6 @@ const Dashboard = () => {
     }
   }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, refetchPrediction, dataPrediction]);
 
-  // if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) return (<LoadingAnimation />);
-
-  // if (fetchDataCard.isError && fetchDataIncomeProfit.isError && fetchDataCategory.isError && fetchDataPrediction.isError) return (<ErrorAnimation />);
-
-  // if (fetchDataCard.isSuccess && fetchDataIncomeProfit.isSuccess && fetchDataCategory.isSuccess && fetchDataPrediction.isSuccess) {
-  //   const cardData = fetchDataCard.data.data.data;
-  //   const incomeProfitData = fetchDataIncomeProfit.data.data.data;
-  //   const categoryData = fetchDataCategory.data.data.data;
-  //   const predictionData = fetchDataPrediction.data.data.data;
-
   if (cardLoading || incomeProfitLoading || categoryLoading || predictionLoading) return (<LoadingAnimation />);
 
   if (cardError || incomeProfitError || categoryError || predictionError) return (<ErrorAnimation />);
@@ -137,16 +81,6 @@ const Dashboard = () => {
     console.log(cardData);
 
     const categories = categoryData.map(item => item.name);
-
-    // const formattedDate = (date) => {
-    //   const newDate = new Date(date);
-
-    //   const day = String(newDate.getDate()).padStart(2, '0');
-    //   const month = String(newDate.getMonth() + 1).padStart(2, '0');
-    //   const year = newDate.getFullYear();
-
-    //   return `${year}-${month}-${day}`;
-    // };
 
     return (
       <div className='flex flex-col px-11 py-6 gap-6'>
