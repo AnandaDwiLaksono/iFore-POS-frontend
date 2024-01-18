@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaMoneyBillWaveAlt, FaWallet } from 'react-icons/fa';
 import { BiCategory, BiFilterAlt } from 'react-icons/bi';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
@@ -16,73 +16,123 @@ const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
   const [selectedCategory, setSelectedCategory] = useState([]);
 
-  const fetchDataCard = useMutation({
-    mutationFn: (data) => {
-      return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, data);
-    },
-  });
+  // const fetchDataCard = useMutation({
+  //   mutationFn: (data) => {
+  //     return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, data);
+  //   },
+  // });
 
-  const fetchDataIncomeProfit = useMutation({
-    mutationFn: (data) => {
-      return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, data);
-    },
-  });
+  // const fetchDataIncomeProfit = useMutation({
+  //   mutationFn: (data) => {
+  //     return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, data);
+  //   },
+  // });
 
-  const fetchDataCategory = useMutation({
-    mutationFn: (data) => {
-      return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, data);
-    },
-  });
+  // const fetchDataCategory = useMutation({
+  //   mutationFn: (data) => {
+  //     return axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, data);
+  //   },
+  // });
 
-  const fetchDataPrediction = useQuery({
-    queryKey: ['prediction'],
-    queryFn: () => {
-      return axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`);
-    },
-  });
+  // const fetchDataPrediction = useQuery({
+  //   queryKey: ['prediction'],
+  //   queryFn: () => {
+  //     return axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`);
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     const data = {
+  //       startDate: selectedDate[0],
+  //       endDate: selectedDate[1],
+  //     };
+
+  //     fetchDataCard.mutate(data);
+  //     fetchDataCategory.mutate(data);
+  //   };
+
+  //   if (selectedCategory) {
+  //     const data = {
+  //       categories: selectedCategory,
+  //     };
+
+  //     fetchDataIncomeProfit.mutate(data);
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedDate, selectedCategory]);
+
+  const { data: cardData, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
+    ['card', selectedDate],
+    () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
+    { enabled: selectedDate !== null }
+  );
+  
+  const { data: incomeProfitData, isLoading: incomeProfitLoading, isError: incomeProfitError, refetch: refetchIncomeProfit } = useQuery(
+    ['incomeProfit', selectedCategory],
+    () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, { categories: selectedCategory }),
+    { enabled: selectedCategory !== null }
+  );
+  
+  const { data: categoryData, isLoading: categoryLoading, isError: categoryError, refetch: refetchCategory } = useQuery(
+    ['category', selectedDate],
+    () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
+    { enabled: selectedDate !== null }
+  );
+  
+  const { data: predictionData, isLoading: predictionLoading, isError: predictionError } = useQuery(
+    'prediction',
+    () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
+    { enabled: true }
+  );
+
+  const formattedDate = useCallback((date) => {
+    const newDate = new Date(date);
+  
+    const day = String(newDate.getDate()).padStart(2, '0');
+    const month = String(newDate.getMonth() + 1).padStart(2, '0');
+    const year = newDate.getFullYear();
+  
+    return `${year}-${month}-${day}`;
+  }, []);
 
   useEffect(() => {
     if (selectedDate) {
-      const data = {
-        startDate: selectedDate[0],
-        endDate: selectedDate[1],
-      };
-
-      fetchDataCard.mutate(data);
-      fetchDataCategory.mutate(data);
-    };
-
-    if (selectedCategory) {
-      const data = {
-        categories: selectedCategory,
-      };
-
-      fetchDataIncomeProfit.mutate(data);
+      refetchCard();
+      refetchCategory();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, selectedCategory]);
+  
+    if (selectedCategory) {
+      refetchIncomeProfit();
+    }
+  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit]);
 
-  if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) return (<LoadingAnimation />);
+  // if (fetchDataCard.isLoading && fetchDataIncomeProfit.isLoading && fetchDataCategory.isLoading && fetchDataPrediction.isLoading) return (<LoadingAnimation />);
 
-  if (fetchDataCard.isError && fetchDataIncomeProfit.isError && fetchDataCategory.isError && fetchDataPrediction.isError) return (<ErrorAnimation />);
+  // if (fetchDataCard.isError && fetchDataIncomeProfit.isError && fetchDataCategory.isError && fetchDataPrediction.isError) return (<ErrorAnimation />);
 
-  if (fetchDataCard.isSuccess && fetchDataIncomeProfit.isSuccess && fetchDataCategory.isSuccess && fetchDataPrediction.isSuccess) {
-    const cardData = fetchDataCard.data.data.data;
-    const incomeProfitData = fetchDataIncomeProfit.data.data.data;
-    const categoryData = fetchDataCategory.data.data.data;
-    const predictionData = fetchDataPrediction.data.data.data;
+  // if (fetchDataCard.isSuccess && fetchDataIncomeProfit.isSuccess && fetchDataCategory.isSuccess && fetchDataPrediction.isSuccess) {
+  //   const cardData = fetchDataCard.data.data.data;
+  //   const incomeProfitData = fetchDataIncomeProfit.data.data.data;
+  //   const categoryData = fetchDataCategory.data.data.data;
+  //   const predictionData = fetchDataPrediction.data.data.data;
 
+  if (cardLoading || incomeProfitLoading || categoryLoading || predictionLoading) return (<LoadingAnimation />);
+
+  if (cardError || incomeProfitError || categoryError || predictionError) return (<ErrorAnimation />);
+
+  if (cardData && incomeProfitData && categoryData && predictionData) {
     const categories = categoryData.map(item => item.name);
 
-    const formattedDate = (date) => {
-      const newDate = new Date(date);
+    // const formattedDate = (date) => {
+    //   const newDate = new Date(date);
 
-      const day = String(newDate.getDate()).padStart(2, '0');
-      const month = String(newDate.getMonth() + 1).padStart(2, '0');
-      const year = newDate.getFullYear();
+    //   const day = String(newDate.getDate()).padStart(2, '0');
+    //   const month = String(newDate.getMonth() + 1).padStart(2, '0');
+    //   const year = newDate.getFullYear();
 
-      return `${year}-${month}-${day}`;
-    };
+    //   return `${year}-${month}-${day}`;
+    // };
 
     return (
       <div className='flex flex-col px-11 py-6 gap-6'>
