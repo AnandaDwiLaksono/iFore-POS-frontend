@@ -126,17 +126,17 @@ const Dashboard = () => {
   if (cardError || incomeProfitError || categoryError || predictionError) return (<ErrorAnimation />);
 
   if (dataCard && dataIncomeProfit && dataCategory && dataPrediction) {
-    const cardData = dataCard.data.data.data;
-    const incomeProfitData = dataIncomeProfit.data.data.data;
-    const categoryData = dataCategory.data.data.data;
-    const predictionData = dataPrediction.data.data.data;
+    const cardData = dataCard.data.data;
+    const incomeProfitData = dataIncomeProfit.data.data;
+    const categoryData = dataCategory.data.data;
+    const predictionData = dataPrediction.data.data;
 
     console.log(predictionData);
     console.log(incomeProfitData);
     console.log(categoryData);
     console.log(cardData);
 
-    // const categories = categoryData.map(item => item.name);
+    const categories = categoryData.map(item => item.name);
 
     // const formattedDate = (date) => {
     //   const newDate = new Date(date);
@@ -200,7 +200,7 @@ const Dashboard = () => {
                     <BiFilterAlt />
                     <MultiSelectComponent
                       id="mtselement"
-                      dataSource={categoryData}
+                      dataSource={categories}
                       placeholder="Filter category"
                       onChange={(e) => setSelectedCategory(e.value)}
                     />
