@@ -83,7 +83,7 @@ const Dashboard = () => {
   const { data: predictionData, isLoading: predictionLoading, isError: predictionError, refetch:refetchPrediction } = useQuery(
     ['prediction'],
     () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
-    { enabled: false }
+    { enabled: true }
   );
 
   const formattedDate = useCallback((date) => {
@@ -96,6 +96,8 @@ const Dashboard = () => {
     return `${year}-${month}-${day}`;
   }, []);
 
+  console.log(predictionData);
+
   useEffect(() => {
     if (selectedDate) {
       refetchCard();
@@ -106,7 +108,7 @@ const Dashboard = () => {
       refetchIncomeProfit();
     }
 
-    if (predictionData) {
+    if (!predictionData) {
       refetchPrediction();
     }
   }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, predictionData, refetchPrediction]);
