@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { ErrorAnimation, LoadingAnimation } from '../components';
 
 const Profile = () => {
 	const [user, setUser] = useState({});
@@ -13,44 +14,70 @@ const Profile = () => {
 	const [newPayment, setNewPayment] = useState([]);
 	const [oldPayment, setOldPayment] = useState([]);
 
-	useQuery({
-		queryKey: ["user"],
-		queryFn: async () => {
-			return await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
-		},
-		onSuccess: (data) => {
-			setUser(data.data.data[0]);
-		},
-		onError: (error) => {
-			console.log(error);
-		},
-	});
+	// useQuery({
+	// 	queryKey: ["user"],
+	// 	queryFn: async () => {
+	// 		return await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
+	// 	},
+	// 	onSuccess: (data) => {
+	// 		setUser(data.data.data[0]);
+	// 	},
+	// 	onError: (error) => {
+	// 		console.log(error);
+	// 	},
+	// });
 
-	useQuery({
-		queryKey: ["category"],
-		queryFn: async () => {
-			return await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
-		},
-		onSuccess: (data) => {
-			setCategories(data.data.data);
-		},
-		onError: (error) => {
-			console.log(error);
-		},
-	});
+	// useQuery({
+	// 	queryKey: ["category"],
+	// 	queryFn: async () => {
+	// 		return await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
+	// 	},
+	// 	onSuccess: (data) => {
+	// 		setCategories(data.data.data);
+	// 	},
+	// 	onError: (error) => {
+	// 		console.log(error);
+	// 	},
+	// });
 
-	useQuery({
-		queryKey: ["payment"],
-		queryFn: async () => {
-			return await axios.get(`${process.env.REACT_APP_API_URL}/api/payment_types`);
-		},
-		onSuccess: (data) => {
-			setPayments(data.data.data);
-		},
-		onError: (error) => {
-			console.log(error);
-		},
-	});
+	// useQuery({
+	// 	queryKey: ["payment"],
+	// 	queryFn: async () => {
+	// 		return await axios.get(`${process.env.REACT_APP_API_URL}/api/payment_types`);
+	// 	},
+	// 	onSuccess: (data) => {
+	// 		setPayments(data.data.data);
+	// 	},
+	// 	onError: (error) => {
+	// 		console.log(error);
+	// 	},
+	// });
+
+	const { data, isLoading, isError } = useQuery(
+    ["profileData"],
+    async () => {
+      const [userData, categoryData, paymentData] = await Promise.all([
+        axios.get(`${process.env.REACT_APP_API_URL}/api/users`),
+        axios.get(`${process.env.REACT_APP_API_URL}/api/categories`),
+        axios.get(`${process.env.REACT_APP_API_URL}/api/payment_types`),
+      ]);
+
+      setUser(userData.data.data[0]);
+      setCategories(categoryData.data.data);
+      setPayments(paymentData.data.data);
+
+      return {
+        user: userData.data.data[0],
+        categories: categoryData.data.data,
+        payments: paymentData.data.data,
+      };
+    },
+    {
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
 
 	const editProfile = useMutation({
 		mutationFn: async (data) => {
@@ -121,43 +148,84 @@ const Profile = () => {
 		setOldPayment(deletePayment);
 	};
 
-	const onClickSaveHandler = () => {
-		editProfile.mutate(user);
+	// const onClickSaveHandler = () => {
+	// 	editProfile.mutate(user);
 
-		if (logo) {
-			editLogo.mutate(logo, {
-				onSuccess: () => {
-					window.location.reload();
-				},
-			});
-		}
+	// 	if (logo) {
+	// 		editLogo.mutate(logo, {
+	// 			onSuccess: () => {
+	// 				window.location.reload();
+	// 			},
+	// 		});
+	// 	}
 
-		if (newCategory.length > 0) {
-			newCategory.forEach(item => {
-				addCategory.mutate({"name": item});
-			});
-		}
+	// 	if (newCategory.length > 0) {
+	// 		newCategory.forEach(item => {
+	// 			addCategory.mutate({"name": item});
+	// 		});
+	// 	}
 
-		if (oldCategory.length > 0) {
-			oldCategory.forEach(item => {
-				deleteCategory.mutate(item);
-			});
-		}
+	// 	if (oldCategory.length > 0) {
+	// 		oldCategory.forEach(item => {
+	// 			deleteCategory.mutate(item);
+	// 		});
+	// 	}
 
-		if (newPayment.length > 0) {
-			newPayment.forEach(item => {
-				addPayment.mutate({"name": item});
-			});
-		}
+	// 	if (newPayment.length > 0) {
+	// 		newPayment.forEach(item => {
+	// 			addPayment.mutate({"name": item});
+	// 		});
+	// 	}
 
-		if (oldPayment.length > 0) {
-			oldPayment.forEach(item => {
-				deletePayment.mutate(item);
-			});
-		}
+	// 	if (oldPayment.length > 0) {
+	// 		oldPayment.forEach(item => {
+	// 			deletePayment.mutate(item);
+	// 		});
+	// 	}
 
-		toast.success("Profile updated successfully!");
-	};
+	// 	toast.success("Profile updated successfully!");
+	// };
+
+	const onClickSaveHandler = async () => {
+    try {
+      await editProfile.mutate(data.user);
+
+      if (logo) {
+        await editLogo.mutate(logo);
+      }
+
+      if (newCategory.length > 0) {
+        await Promise.all(
+          newCategory.map((item) => addCategory.mutate({ name: item }))
+        );
+      }
+
+      if (oldCategory.length > 0) {
+        await Promise.all(
+          oldCategory.map((item) => deleteCategory.mutate(item))
+        );
+      }
+
+      if (newPayment.length > 0) {
+        await Promise.all(
+          newPayment.map((item) => addPayment.mutate({ name: item }))
+        );
+      }
+
+      if (oldPayment.length > 0) {
+        await Promise.all(
+          oldPayment.map((item) => deletePayment.mutate(item))
+        );
+      }
+
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+			toast.error("Profile updated failed! Error: ", error.message);
+    }
+  };
+
+	if (isLoading) return (<LoadingAnimation />);
+	if (isError) return (<ErrorAnimation />);
 
 	return (
 		<div className='p-6 relative'>
@@ -179,14 +247,6 @@ const Profile = () => {
 							Vape Store
 						</span>
 					</div>
-					{/* <div className='md:pl-6 md:basis-1/2 flex-grow-0 md:max-w-[50%] box-border m-0 ml-auto basis-full max-w-full md:text-end text-center pt-6 md:pt-0'>
-						<button
-							type='button'
-							className=' bg-red-200 py-2 rounded-xl shadow-md text-red-500 md:w-[90px] w-[80%] hover:scale-105 font-semibold hover:bg-red-100 hover:text-red-400'
-						>
-							<a href='/auth/login'>Log out</a>
-						</button>
-					</div> */}
 				</div>
 			</div>
 			<div className='mt-10 mb-6'>
@@ -260,61 +320,6 @@ const Profile = () => {
 									}}
 								/>
 							</div>
-							{/* <label
-								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] font-bold'
-							>
-								Business Type
-							</label>
-							<div className='pt-1 px-4'>
-								<select className='border-solid border-1 w-[50%]'>
-									<option>Select</option>
-									<option>Accessories Shop</option>
-									<option>Alcohol Shop</option>
-									<option>Automotive</option>
-									<option>Baby & Kids Store</option>
-									<option>Bakery</option>
-									<option>Beverage Franchise</option>
-									<option>Bookstore</option>
-									<option>Boutique Store</option>
-									<option>Building Materials Store</option>
-									<option>Catering</option>
-									<option>Coffe Shop</option>
-									<option>Collection</option>
-									<option>Computer Store</option>
-									<option>Cosmetic Shop</option>
-									<option>Department Store</option>
-									<option>Electronic Store</option>
-									<option>Equiqment Stores</option>
-									<option>Farming</option>
-									<option>Fashion Shop</option>
-									<option>Fastfood</option>
-									<option>Florist</option>
-									<option>Food Franchise</option>
-									<option>Fruits Shop</option>
-									<option>Furniture Store</option>
-									<option>General Service</option>
-									<option>Gift Shop</option>
-									<option>Grocery & Beverage Shop</option>
-									<option>Grocery Store</option>
-									<option>Gym / Fitness Center</option>
-									<option>Handphone Store</option>
-									<option>Laundry</option>
-									<option>Frozen Food</option>
-									<option>Minimarket</option>
-									<option>Optik</option>
-									<option>Pet Store</option>
-									<option>Pharmacies / Medecines</option>
-									<option>Printing</option>
-									<option>Restaurants</option>
-									<option>Roadside Stall</option>
-									<option>Salon / Barber</option>
-									<option>Shoe Shop</option>
-									<option>Spa / Massage</option>
-									<option>Stationary</option>
-									<option>Vape Store</option>
-									<option>Toy Shop</option>
-								</select>
-							</div> */}
 							<label
 								className='px-4 pt-4 text-sm leading-normal tracking-[0.02857em] text-[#344767] dark:text-white font-bold'
 							>
