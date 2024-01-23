@@ -9,82 +9,55 @@ import { useStateContext } from '../contexts/ContextProvider';
 const AddOrderList = ({ dataItem, dataOrder }) => {
   const { currencyFormat, icon, setIcon, setAddOrderList, currentColor, onOrder, setOnOrder } = useStateContext();
 
-  // const [qty, setQty] = useState(dataItem.qty ? dataItem.qty : (dataItem.qty_stock === 0 ? 0 : 1));
-  // const [discount, setDiscount] = useState(dataItem.discount ? dataItem.discount : 0);
+  const [qty, setQty] = useState(dataItem.qty ? dataItem.qty : (dataItem.qty_stock === 0 ? 0 : 1));
+  const [discount, setDiscount] = useState(dataItem.discount ? dataItem.discount : 0);
 
-  const [qty, setQty] = useState(dataItem.qty || (dataItem.qty_stock === 0 ? 0 : 1));
-  const [discount, setDiscount] = useState(dataItem.discount || 0);
+  const addOrder = useMutation({
+    mutationFn: (orderList) => {
+      return axios.post(`${process.env.REACT_APP_API_URL}/api/order_items`, orderList);
+    },
+    onSuccess: (data) => {
+      dataOrder(data.data.order);
+    },
+    onError: () => {
+      console.log('error');
+    }
+  });
 
-  // const addOrder = useMutation({
-  //   mutationFn: (orderList) => {
-  //     return axios.post(`${process.env.REACT_APP_API_URL}/api/order_items`, orderList);
-  //   },
-  //   onSuccess: (data) => {
-  //     dataOrder(data.data.order);
-  //   },
-  //   onError: () => {
-  //     console.log('error');
-  //   }
-  // });
-
-  // const editOrder = useMutation({
-  //   mutationFn: (orderList) => {
-  //     return axios.put(`${process.env.REACT_APP_API_URL}/api/order_items/${dataItem.id}`, orderList);
-  //   },
-  //   onSuccess: (data) => {
-  //     dataOrder(data.data.order);
-  //   },
-  //   onError: () => {
-  //     console.log('error');
-  //   }
-  // });
-  
-  const mutationConfig = {
-    onSuccess: (data) => dataOrder(data.data.order),
-    onError: () => console.log('error'),
-  };
-
-  const addOrder = useMutation((orderList) => axios.post(`${process.env.REACT_APP_API_URL}/api/order_items`, orderList), mutationConfig);
-
-  const editOrder = useMutation((orderList) => axios.put(`${process.env.REACT_APP_API_URL}/api/order_items/${dataItem.id}`, orderList), mutationConfig);
+  const editOrder = useMutation({
+    mutationFn: (orderList) => {
+      return axios.put(`${process.env.REACT_APP_API_URL}/api/order_items/${dataItem.id}`, orderList);
+    },
+    onSuccess: (data) => {
+      dataOrder(data.data.order);
+    },
+    onError: () => {
+      console.log('error');
+    }
+  });
 
   const handleSave = () => {
-    // const discountItem = icon ? discount : discount / 100 * dataItem.selling_price;
-    const discountItem = icon ? discount : (discount / 100) * dataItem.selling_price;
+    const discountItem = icon ? discount : discount / 100 * dataItem.selling_price;
     const profitItem = (dataItem.selling_price - dataItem.purchase_price) * qty;
 
-    // if (onOrder) {
-    //   const orderItem = {
-    //     item_id: dataItem.item_id,
-    //     qty: qty,
-    //     discount: discountItem,
-    //     total: dataItem.selling_price * qty,
-    //     profit: profitItem - discountItem,
-    //   }
-
-    //   editOrder.mutate(orderItem);
-    // } else {
-    //   const orderItem = {
-    //     item_id: dataItem.id,
-    //     qty: qty,
-    //     discount: discountItem,
-    //     total: dataItem.selling_price * qty,
-    //     profit: profitItem - discountItem,
-    //   }
-    //   addOrder.mutate(orderItem);
-    // }
-
-    const orderItem = {
-      item_id: dataItem.id,
-      qty: qty,
-      discount: discountItem,
-      total: dataItem.selling_price * qty,
-      profit: profitItem - discountItem,
-    };
-
     if (onOrder) {
+      const orderItem = {
+        item_id: dataItem.item_id,
+        qty: qty,
+        discount: discountItem,
+        total: dataItem.selling_price * qty,
+        profit: profitItem - discountItem,
+      }
+
       editOrder.mutate(orderItem);
     } else {
+      const orderItem = {
+        item_id: dataItem.id,
+        qty: qty,
+        discount: discountItem,
+        total: dataItem.selling_price * qty,
+        profit: profitItem - discountItem,
+      }
       addOrder.mutate(orderItem);
     }
 
