@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   const predictionData = [1780000, 1430000, 3480000, 2620000, 2005000, 1510000, 1720000]
 
-  const prediction = modelForecasting.data.predict([predictionData])
+  const prediction = localStorage.getItem('modelForecasting').predict([predictionData])
 
   console.log(prediction)
 
