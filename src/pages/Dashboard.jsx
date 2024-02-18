@@ -40,6 +40,25 @@ const Dashboard = () => {
     { enabled: true }
   );
 
+  const options = {
+    category: "total",
+    parameter: {
+        seed: 0,
+        maxFeatures: 0,
+        replacement: true,
+        nEstimators: 25,
+        selectionMethod: "median"
+    }
+  }
+
+  const { data: modelForecasting } = useQuery(
+    ['modelForecasting', options],
+    () => axios.post(`${process.env.REACT_APP_API_URL}/api/model-forecasting`, { category: options.category, parameter: options.parameter}),
+    { enabled: selectedDate !== null }
+  );
+
+  console.log(modelForecasting);
+
   const formattedDate = useCallback((date) => {
     const newDate = new Date(date);
   
