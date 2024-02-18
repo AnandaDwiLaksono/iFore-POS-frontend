@@ -40,30 +40,30 @@ const Dashboard = () => {
     { enabled: true }
   );
 
-  const options = {
-    category: "total",
-    parameter: {
-        seed: 0,
-        maxFeatures: 0,
-        replacement: true,
-        nEstimators: 25,
-        selectionMethod: "median"
-    }
-  }
+  // const options = {
+  //   category: "total",
+  //   parameter: {
+  //       seed: 0,
+  //       maxFeatures: 0,
+  //       replacement: true,
+  //       nEstimators: 25,
+  //       selectionMethod: "median"
+  //   }
+  // }
 
-  const { data: modelForecasting } = useQuery(
-    ['modelForecasting', options],
-    () => axios.post(`${process.env.REACT_APP_API_URL}/api/model-forecasting`, { category: options.category, parameter: options.parameter}),
-    { enabled: selectedDate !== null }
-  );
+  // const { data: modelForecasting } = useQuery(
+  //   ['modelForecasting', options],
+  //   () => axios.post(`${process.env.REACT_APP_API_URL}/api/model-forecasting`, { category: options.category, parameter: options.parameter}),
+  //   { enabled: selectedDate !== null }
+  // );
 
-  localStorage.setItem('modelForecasting', modelForecasting)
+  // localStorage.setItem('modelForecasting', modelForecasting)
 
-  const predictionData = [1780000, 1430000, 3480000, 2620000, 2005000, 1510000, 1720000]
+  // const predictionData = [1780000, 1430000, 3480000, 2620000, 2005000, 1510000, 1720000]
 
-  const prediction = localStorage.getItem('modelForecasting').predict([predictionData])
+  // const prediction = localStorage.getItem('modelForecasting').predict([predictionData])
 
-  console.log(prediction)
+  // console.log(prediction)
 
   const formattedDate = useCallback((date) => {
     const newDate = new Date(date);
