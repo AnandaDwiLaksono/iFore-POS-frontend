@@ -57,13 +57,13 @@ const Dashboard = () => {
     { enabled: selectedDate !== null }
   );
 
-  localStorage.setItem('modelForecasting', modelForecasting);
+  localStorage.setItem('modelForecasting', modelForecasting)
 
   const predictionData = [1780000, 1430000, 3480000, 2620000, 2005000, 1510000, 1720000]
 
   const prediction = modelForecasting.data.predict([predictionData])
 
-  console.log(prediction);
+  console.log(prediction)
 
   const formattedDate = useCallback((date) => {
     const newDate = new Date(date);
