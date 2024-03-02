@@ -3,7 +3,7 @@ import { IoCartSharp } from 'react-icons/io5';
 import { FaMoneyBillWaveAlt, FaWallet } from 'react-icons/fa';
 import { BiCategory, BiFilterAlt } from 'react-icons/bi';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
@@ -40,30 +40,33 @@ const Dashboard = () => {
     { enabled: true }
   );
 
-  // const options = {
-  //   category: "total",
-  //   parameter: {
-  //       seed: 0,
-  //       maxFeatures: 0,
-  //       replacement: true,
-  //       nEstimators: 25,
-  //       selectionMethod: "median"
-  //   }
-  // }
+  const payload = {
+    category: "Freebase",
+    parameter: {
+        seed: 0,
+        maxFeatures: 0,
+        replacement: false,
+        nEstimators: 266,
+        selectionMethod: "median"
+    },
+    data: [6, 5, 6, 3, 4, 3, 3]
+  }
 
-  // const { data: modelForecasting } = useQuery(
-  //   ['modelForecasting', options],
-  //   () => axios.post(`${process.env.REACT_APP_API_URL}/api/model-forecasting`, { category: options.category, parameter: options.parameter}),
-  //   { enabled: selectedDate !== null }
-  // );
-
-  // localStorage.setItem('modelForecasting', modelForecasting)
-
-  // const predictionData = [1780000, 1430000, 3480000, 2620000, 2005000, 1510000, 1720000]
-
-  // const prediction = localStorage.getItem('modelForecasting').predict([predictionData])
-
-  // console.log(prediction)
+  const dataPredictions = useMutation({
+    mutationFn: async (data) => {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/model-forecasting`, data);
+      
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    }
+  });
+  
+  dataPredictions.mutate(payload);
 
   const formattedDate = useCallback((date) => {
     const newDate = new Date(date);
