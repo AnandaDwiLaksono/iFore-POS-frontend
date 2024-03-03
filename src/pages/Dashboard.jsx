@@ -36,11 +36,11 @@ const Dashboard = () => {
     { enabled: selectedDate !== null }
   );
   
-  const { data: dataPrediction, isLoading: predictionLoading, isError: predictionError, refetch:refetchPrediction } = useQuery(
-    ['prediction'],
-    () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
-    { enabled: true }
-  );
+  // const { data: dataPrediction, isLoading: predictionLoading, isError: predictionError, refetch:refetchPrediction } = useQuery(
+  //   ['prediction'],
+  //   () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
+  //   { enabled: true }
+  // );
 
   const dataPredictions = useMutation({
     mutationFn: async (data) => {
@@ -151,27 +151,31 @@ const Dashboard = () => {
       refetchIncomeProfit();
     }
 
-    if (!dataPrediction) {
-      refetchPrediction();
-    }
+    // if (!dataPrediction) {
+    //   refetchPrediction();
+    // }
     
     for (let i = 0; i < payload.length; i++) {
       dataPredictions.mutate(payload[i]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, refetchPrediction, dataPrediction]);
+    // }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, refetchPrediction, dataPrediction]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit]);
 
-  if (cardLoading || incomeProfitLoading || categoryLoading || predictionLoading) return (<LoadingAnimation />);
+  // if (cardLoading || incomeProfitLoading || categoryLoading || predictionLoading) return (<LoadingAnimation />);
+  if (cardLoading || incomeProfitLoading || categoryLoading || predictionDatas.length !== payload.length) return (<LoadingAnimation />);
 
-  if (cardError || incomeProfitError || categoryError || predictionError) return (<ErrorAnimation />);
+  // if (cardError || incomeProfitError || categoryError || predictionError) return (<ErrorAnimation />);
+  if (cardError || incomeProfitError || categoryError) return (<ErrorAnimation />);
 
-  if (dataCard && dataIncomeProfit && dataCategory && dataPrediction) {
+  // if (dataCard && dataIncomeProfit && dataCategory && dataPrediction) {
+  if (dataCard && dataIncomeProfit && dataCategory && predictionDatas.length === payload.length) {
     const cardData = dataCard.data.data;
     const incomeProfitData = dataIncomeProfit.data.data;
     const categoryData = dataCategory.data.data;
-    const predictionData = dataPrediction.data.data;
+    // const predictionData = dataPrediction.data.data;
 
-    console.log(predictionData);
+    // console.log(predictionData);
     console.log(incomeProfitData);
     console.log(categoryData);
     console.log(cardData);
