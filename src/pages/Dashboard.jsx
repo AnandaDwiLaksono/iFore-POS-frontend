@@ -15,6 +15,8 @@ const Dashboard = () => {
 
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [predictionDatas, setPredictionDatas] = useState([]);
+  const [actualDatas, setActualDatas] = useState([]);
 
   const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
     ['card', selectedDate],
@@ -40,23 +42,11 @@ const Dashboard = () => {
     { enabled: true }
   );
 
-  const payload = {
-    category: "Freebase",
-    parameter: {
-        seed: 0,
-        maxFeatures: 0,
-        replacement: false,
-        nEstimators: 266,
-        selectionMethod: "median"
-    },
-    data: [6, 5, 6, 3, 4, 3, 3]
-  }
-
   const dataPredictions = useMutation({
     mutationFn: async (data) => {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/model-forecasting`, data);
       
-      return response.data;
+      return [response.data, data.category];
     },
     onSuccess: (data) => {
       console.log(data);
@@ -66,7 +56,78 @@ const Dashboard = () => {
     }
   });
   
-  dataPredictions.mutate(payload);
+  const payload = [
+    {
+      catergory: 'total',
+      parameter: {
+        seed: 0,
+        maxFeatures: 0,
+        replacement: true,
+        nEstimators: 25,
+        selectionMethod: 'median'
+      }
+    },
+    {
+      category: 'Freebase',
+      parameter: {
+        seed: 0,
+        maxFeatures: 0,
+        replacement: false,
+        nEstimators: 266,
+        selectionMethod: 'median'
+      }
+    },
+    {
+      category: 'Saltnic',
+      parameter: {
+        seed: 0,
+        maxFeatures: 5,
+        replacement: true,
+        nEstimators: 42,
+        selectionMethod: 'median'
+      }
+    },
+    {
+      category: 'Pod',
+      parameter: {
+        seed: 1,
+        maxFeatures: 4,
+        replacement: false,
+        nEstimators: 103,
+        selectionMethod: 'median'
+      }
+    },
+    {
+      category: 'Mod',
+      parameter: {
+        seed: 0,
+        maxFeatures: 6,
+        replacement: false,
+        nEstimators: 15,
+        selectionMethod: 'mean'
+      }
+    },
+    {
+      category: 'Coil',
+      parameter: {
+        seed: 0,
+        maxFeatures: 5,
+        replacement: false,
+        nEstimators: 57,
+        selectionMethod: 'median'
+      }
+    },
+    {
+      category: 'Accessories',
+      parameter: {
+        seed: 0,
+        maxFeatures: 3,
+        replacement: false,
+        nEstimators: 217,
+        selectionMethod: 'median'
+      }
+    }
+  ]
 
   const formattedDate = useCallback((date) => {
     const newDate = new Date(date);
@@ -91,6 +152,9 @@ const Dashboard = () => {
     if (!dataPrediction) {
       refetchPrediction();
     }
+
+    dataPredictions.mutate(payload[0]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, refetchPrediction, dataPrediction]);
 
   if (cardLoading || incomeProfitLoading || categoryLoading || predictionLoading) return (<LoadingAnimation />);
