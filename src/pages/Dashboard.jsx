@@ -58,7 +58,7 @@ const Dashboard = () => {
   
   const payload = [
     {
-      catergory: 'total',
+      category: 'total',
       parameter: {
         seed: 0,
         maxFeatures: 0,
