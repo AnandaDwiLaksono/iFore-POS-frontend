@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [predictionDatas, setPredictionDatas] = useState([]);
   const [actualDatas, setActualDatas] = useState([]);
+  // const [refetch, setRefetch] = useState(false);
 
   const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
     ['card', selectedDate],
@@ -35,12 +36,6 @@ const Dashboard = () => {
     () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
     { enabled: selectedDate !== null }
   );
-  
-  // const { data: dataPrediction, isLoading: predictionLoading, isError: predictionError, refetch:refetchPrediction } = useQuery(
-  //   ['prediction'],
-  //   () => axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard/prediction`),
-  //   { enabled: true }
-  // );
 
   const dataPredictions = useMutation({
     mutationFn: async (data) => {
@@ -55,7 +50,12 @@ const Dashboard = () => {
     },
     onError: (error) => {
       console.log(error);
-    }
+      // setPredictionDatas([])
+      // setActualDatas([])
+      // setRefetch(true);
+      dataPredictions.mutate(error.config.data);
+    },
+    throwOnError: true
   });
   
   const payload = [
@@ -151,34 +151,35 @@ const Dashboard = () => {
       refetchIncomeProfit();
     }
 
-    // if (!dataPrediction) {
-    //   refetchPrediction();
-    // }
+    // const fetchDataPredictions = async () => {
+    //   for (let i = 0; i < payload.length; i++) {
+    //     try {
+    //       // Try to mutate the data
+    //       await dataPredictions.mutate(payload[i]);
+    //     } catch (error) {
+    //       // Handle error for the specific mutation
+    //       console.log(`Error fetching data for category ${payload[i].category}:`, error);
+    //     }
+    //   }
+    // };
+
+    // fetchDataPredictions();
     
     for (let i = 0; i < payload.length; i++) {
       dataPredictions.mutate(payload[i]);
     }
-    // }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, refetchPrediction, dataPrediction]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit]);
 
-  // if (cardLoading || incomeProfitLoading || categoryLoading || predictionLoading) return (<LoadingAnimation />);
   if (cardLoading || incomeProfitLoading || categoryLoading || predictionDatas.length !== payload.length) return (<LoadingAnimation />);
 
-  // if (cardError || incomeProfitError || categoryError || predictionError) return (<ErrorAnimation />);
   if (cardError || incomeProfitError || categoryError) return (<ErrorAnimation />);
 
-  // if (dataCard && dataIncomeProfit && dataCategory && dataPrediction) {
   if (dataCard && dataIncomeProfit && dataCategory && predictionDatas.length === payload.length) {
     const cardData = dataCard.data.data;
     const incomeProfitData = dataIncomeProfit.data.data;
     const categoryData = dataCategory.data.data;
-    // const predictionData = dataPrediction.data.data;
 
-    // console.log(predictionData);
-    // console.log(incomeProfitData);
-    // console.log(categoryData);
-    // console.log(cardData);
     console.log(predictionDatas);
     console.log(actualDatas);
 
@@ -269,13 +270,6 @@ const Dashboard = () => {
           Forecasting
         </div>
         <div className='flex flex-wrap -ml-6 -mt-6 w-[calc(100%+24px)] justify-center'>
-          {/* <ForecastingChart id='income-chart' data={[predictionData.incomeDataActual, predictionData.incomeDataForecasting]} label='RP {value}' title='Income' header='Income' />
-          <ForecastingChart id='freebase-chart' data={[predictionData.freebaseDataActual, predictionData.freebaseDataForecasting]} label='{value}' header='Freebase' />
-          <ForecastingChart id='saltnic-chart' data={[predictionData.saltnicDataActual, predictionData.saltnicDataForecasting]} label='{value}' header='Saltnic' />
-          <ForecastingChart id='pod-chart' data={[predictionData.podDataActual, predictionData.podDataForecasting]} label='{value}' header='Pod' />
-          <ForecastingChart id='mod-chart' data={[predictionData.modDataActual, predictionData.modDataForecasting]} label='{value}' header='Mod' />
-          <ForecastingChart id='coil-chart' data={[predictionData.coilDataActual, predictionData.coilDataForecasting]} label='{value}' header='Coil' />
-          <ForecastingChart id='accessories-chart' data={[predictionData.accessoriesDataActual, predictionData.accessoriesDataForecasting]} label='{value}' header='Accessories' /> */}
           <ForecastingChart id='income-chart' data={[actualDatas.find(item => item.category === 'total').data, predictionDatas.find(item => item.category === 'total').data]} label='RP {value}' title='Income' header='Income' />
           <ForecastingChart id='freebase-chart' data={[actualDatas.find(item => item.category === 'Freebase').data, predictionDatas.find(item => item.category === 'Freebase').data]} label='{value}' header='Freebase' />
           <ForecastingChart id='saltnic-chart' data={[actualDatas.find(item => item.category === 'Saltnic').data, predictionDatas.find(item => item.category === 'Saltnic').data]} label='{value}' header='Saltnic' />
