@@ -13,7 +13,7 @@ const ForecastingChart = ({ id, data, label, title, header }) => {
     edgeLabelPlacement: 'Shift',
     labelStyle: { color: 'gray' },
     minimum: data[0][0].x,
-    maximum: data[1][2].x,
+    maximum: data[1][3].x,
   };
   
   const linePrimaryYAxis = {
