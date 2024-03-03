@@ -49,7 +49,7 @@ const Dashboard = () => {
       return [response.data, data.category];
     },
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
       setPredictionDatas(prev => [...prev, { category: data[1], data: data[0].prediction }]);
       setActualDatas(prev => [...prev, { category: data[1], data: data[0].dataActual }]);
     },
@@ -176,9 +176,11 @@ const Dashboard = () => {
     // const predictionData = dataPrediction.data.data;
 
     // console.log(predictionData);
-    console.log(incomeProfitData);
-    console.log(categoryData);
-    console.log(cardData);
+    // console.log(incomeProfitData);
+    // console.log(categoryData);
+    // console.log(cardData);
+    console.log(predictionDatas);
+    console.log(actualDatas);
 
     const categories = categoryData.map(item => item.name);
 
