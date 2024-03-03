@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaMoneyBillWaveAlt, FaWallet } from 'react-icons/fa';
@@ -9,6 +10,7 @@ import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import { Card, CategoryPie, ErrorAnimation, ForecastingChart, IncomeProfit, LoadingAnimation } from '../components';
+import { debounce } from '@syncfusion/ej2-base';
 
 const Dashboard = () => {
   const { numberFormat } = useStateContext();
@@ -17,7 +19,6 @@ const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [predictionDatas, setPredictionDatas] = useState([]);
   const [actualDatas, setActualDatas] = useState([]);
-  // const [refetch, setRefetch] = useState(false);
 
   const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
     ['card', selectedDate],
@@ -44,18 +45,13 @@ const Dashboard = () => {
       return [response.data, data.category];
     },
     onSuccess: (data) => {
-      // console.log(data);
       setPredictionDatas(prev => [...prev, { category: data[1], data: data[0].prediction }]);
       setActualDatas(prev => [...prev, { category: data[1], data: data[0].dataActual }]);
     },
     onError: (error) => {
       console.log(error);
-      // setPredictionDatas([])
-      // setActualDatas([])
-      // setRefetch(true);
       dataPredictions.mutate(error.config.data);
     },
-    throwOnError: true
   });
   
   const payload = [
@@ -141,35 +137,24 @@ const Dashboard = () => {
     return `${year}-${month}-${day}`;
   }, []);
 
+  const debouncedRefetchCard = useCallback(debounce(refetchCard, 1000), [selectedDate]);
+  const debouncedRefetchCategory = useCallback(debounce(refetchCategory, 1000), [selectedDate]);
+  const debouncedRefetchIncomeProfit = useCallback(debounce(refetchIncomeProfit, 1000), [selectedCategory]);
+
   useEffect(() => {
     if (selectedDate) {
-      refetchCard();
-      refetchCategory();
+      debouncedRefetchCard();
+      debouncedRefetchCategory();
     }
   
     if (selectedCategory) {
-      refetchIncomeProfit();
+      debouncedRefetchIncomeProfit();
     }
-
-    // const fetchDataPredictions = async () => {
-    //   for (let i = 0; i < payload.length; i++) {
-    //     try {
-    //       // Try to mutate the data
-    //       await dataPredictions.mutate(payload[i]);
-    //     } catch (error) {
-    //       // Handle error for the specific mutation
-    //       console.log(`Error fetching data for category ${payload[i].category}:`, error);
-    //     }
-    //   }
-    // };
-
-    // fetchDataPredictions();
     
     for (let i = 0; i < payload.length; i++) {
       dataPredictions.mutate(payload[i]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit]);
+  }, [selectedDate, selectedCategory, debouncedRefetchCard, debouncedRefetchCategory, debouncedRefetchIncomeProfit]);
 
   if (cardLoading || incomeProfitLoading || categoryLoading || predictionDatas.length !== payload.length) return (<LoadingAnimation />);
 
