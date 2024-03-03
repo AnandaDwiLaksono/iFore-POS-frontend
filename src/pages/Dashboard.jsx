@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaMoneyBillWaveAlt, FaWallet } from 'react-icons/fa';
@@ -10,7 +9,6 @@ import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
 import { useStateContext } from '../contexts/ContextProvider';
 import { Card, CategoryPie, ErrorAnimation, ForecastingChart, IncomeProfit, LoadingAnimation } from '../components';
-import { debounce } from '@syncfusion/ej2-base';
 
 const Dashboard = () => {
   const { numberFormat } = useStateContext();
@@ -137,24 +135,21 @@ const Dashboard = () => {
     return `${year}-${month}-${day}`;
   }, []);
 
-  const debouncedRefetchCard = useCallback(debounce(refetchCard, 1000), [selectedDate]);
-  const debouncedRefetchCategory = useCallback(debounce(refetchCategory, 1000), [selectedDate]);
-  const debouncedRefetchIncomeProfit = useCallback(debounce(refetchIncomeProfit, 1000), [selectedCategory]);
-
   useEffect(() => {
     if (selectedDate) {
-      debouncedRefetchCard();
-      debouncedRefetchCategory();
+      refetchCard();
+      refetchCategory();
     }
   
     if (selectedCategory) {
-      debouncedRefetchIncomeProfit();
+      refetchIncomeProfit();
     }
     
     for (let i = 0; i < payload.length; i++) {
       dataPredictions.mutate(payload[i]);
     }
-  }, [selectedDate, selectedCategory, debouncedRefetchCard, debouncedRefetchCategory, debouncedRefetchIncomeProfit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit]);
 
   if (cardLoading || incomeProfitLoading || categoryLoading || predictionDatas.length !== payload.length) return (<LoadingAnimation />);
 
