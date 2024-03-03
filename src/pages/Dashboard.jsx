@@ -50,6 +50,8 @@ const Dashboard = () => {
     },
     onSuccess: (data) => {
       console.log(data);
+      setPredictionDatas(prev => [...prev, { category: data[1], data: data[0].prediction }]);
+      setActualDatas(prev => [...prev, { category: data[1], data: data[0].dataActual }]);
     },
     onError: (error) => {
       console.log(error);
@@ -152,8 +154,10 @@ const Dashboard = () => {
     if (!dataPrediction) {
       refetchPrediction();
     }
-
-    dataPredictions.mutate(payload[0]);
+    
+    for (let i = 0; i < payload.length; i++) {
+      dataPredictions.mutate(payload[i]);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit, refetchPrediction, dataPrediction]);
 
@@ -259,13 +263,20 @@ const Dashboard = () => {
           Forecasting
         </div>
         <div className='flex flex-wrap -ml-6 -mt-6 w-[calc(100%+24px)] justify-center'>
-          <ForecastingChart id='income-chart' data={[predictionData.incomeDataActual, predictionData.incomeDataForecasting]} label='RP {value}' title='Income' header='Income' />
+          {/* <ForecastingChart id='income-chart' data={[predictionData.incomeDataActual, predictionData.incomeDataForecasting]} label='RP {value}' title='Income' header='Income' />
           <ForecastingChart id='freebase-chart' data={[predictionData.freebaseDataActual, predictionData.freebaseDataForecasting]} label='{value}' header='Freebase' />
           <ForecastingChart id='saltnic-chart' data={[predictionData.saltnicDataActual, predictionData.saltnicDataForecasting]} label='{value}' header='Saltnic' />
           <ForecastingChart id='pod-chart' data={[predictionData.podDataActual, predictionData.podDataForecasting]} label='{value}' header='Pod' />
           <ForecastingChart id='mod-chart' data={[predictionData.modDataActual, predictionData.modDataForecasting]} label='{value}' header='Mod' />
           <ForecastingChart id='coil-chart' data={[predictionData.coilDataActual, predictionData.coilDataForecasting]} label='{value}' header='Coil' />
-          <ForecastingChart id='accessories-chart' data={[predictionData.accessoriesDataActual, predictionData.accessoriesDataForecasting]} label='{value}' header='Accessories' />
+          <ForecastingChart id='accessories-chart' data={[predictionData.accessoriesDataActual, predictionData.accessoriesDataForecasting]} label='{value}' header='Accessories' /> */}
+          <ForecastingChart id='income-chart' data={[actualDatas.find(item => item.category === 'total').data, predictionDatas.find(item => item.category === 'total').data]} label='RP {value}' title='Income' header='Income' />
+          <ForecastingChart id='freebase-chart' data={[actualDatas.find(item => item.category === 'Freebase').data, predictionDatas.find(item => item.category === 'Freebase').data]} label='{value}' header='Freebase' />
+          <ForecastingChart id='saltnic-chart' data={[actualDatas.find(item => item.category === 'Saltnic').data, predictionDatas.find(item => item.category === 'Saltnic').data]} label='{value}' header='Saltnic' />
+          <ForecastingChart id='pod-chart' data={[actualDatas.find(item => item.category === 'Pod').data, predictionDatas.find(item => item.category === 'Pod').data]} label='{value}' header='Pod' />
+          <ForecastingChart id='mod-chart' data={[actualDatas.find(item => item.category === 'Mod').data, predictionDatas.find(item => item.category === 'Mod').data]} label='{value}' header='Mod' />
+          <ForecastingChart id='coil-chart' data={[actualDatas.find(item => item.category === 'Coil').data, predictionDatas.find(item => item.category === 'Coil').data]} label='{value}' header='Coil' />
+          <ForecastingChart id='accessories-chart' data={[actualDatas.find(item => item.category === 'Accessories').data, predictionDatas.find(item => item.category === 'Accessories').data]} label='{value}' header='Accessories' />
         </div>
       </div>
     );
