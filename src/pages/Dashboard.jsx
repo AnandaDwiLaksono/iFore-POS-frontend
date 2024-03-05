@@ -18,11 +18,11 @@ const Dashboard = () => {
   const [predictionDatas, setPredictionDatas] = useState([]);
   const [actualDatas, setActualDatas] = useState([]);
 
-  const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
-    ['card', selectedDate],
-    () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
-    { enabled: selectedDate !== null }
-  );
+  // const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
+  //   ['card', selectedDate],
+  //   () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
+  //   { enabled: selectedDate !== null }
+  // );
   
   const { data: dataIncomeProfit, isLoading: incomeProfitLoading, isError: incomeProfitError, refetch: refetchIncomeProfit } = useQuery(
     ['incomeProfit', selectedCategory],
@@ -137,7 +137,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (selectedDate) {
-      refetchCard();
+      // refetchCard();
       refetchCategory();
     }
   
@@ -149,14 +149,14 @@ const Dashboard = () => {
       dataPredictions.mutate(payload[i]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, selectedCategory, refetchCard, refetchCategory, refetchIncomeProfit]);
+  }, [selectedDate, selectedCategory, refetchCategory, refetchIncomeProfit]);
 
-  if (cardLoading || incomeProfitLoading || categoryLoading || predictionDatas.length !== payload.length) return (<LoadingAnimation />);
+  if (incomeProfitLoading || categoryLoading || predictionDatas.length !== payload.length) return (<LoadingAnimation />);
 
-  if (cardError || incomeProfitError || categoryError) return (<ErrorAnimation />);
+  if (incomeProfitError || categoryError) return (<ErrorAnimation />);
 
-  if (dataCard && dataIncomeProfit && dataCategory && predictionDatas.length === payload.length) {
-    const cardData = dataCard.data.data;
+  if (dataIncomeProfit && dataCategory && predictionDatas.length === payload.length) {
+    // const cardData = dataCard.data.data;
     const incomeProfitData = dataIncomeProfit.data.data;
     const categoryData = dataCategory.data.data;
 
@@ -183,26 +183,30 @@ const Dashboard = () => {
         <div className='box-border flex flex-wrap -mt-6 -ml-6 w-[calc(100%+24px)]'>
           <Card
             title='Transaction'
-            value={cardData.transactionTotal}
-            percentage={cardData.transactionTotalPercentage}
+            value='transactionTotal'
+            percentage='transactionTotalPercentage'
             icon={<IoCartSharp />}
+            selectedDate={selectedDate}
           />
           <Card
             title='Income'
-            value={`Rp${numberFormat.format(cardData.incomeTotal)}`}
-            percentage={cardData.incomeTotalPercentage}
+            value='incomeTotal'
+            percentage='incomeTotalPercentage'
             icon={<FaMoneyBillWaveAlt />}
+            selectedDate={selectedDate}
           />
           <Card
             title='Profit'
-            value={`Rp${numberFormat.format(cardData.profitTotal)}`}
-            percentage={cardData.profitTotalPercentage}
+            value='profitTotal'
+            percentage='profitTotalPercentage'
             icon={<FaWallet />}
+            selectedDate={selectedDate}
           />
           <Card
             title='Best Selling Category'
-            value={cardData.bestSellerCategory}
+            value='bestSellerCategory'
             icon={<BiCategory />}
+            selectedDate={selectedDate}
           />
         </div>
         <div className='flex flex-wrap -ml-6 -mt-6 w-[calc(100%+24px)]'>
