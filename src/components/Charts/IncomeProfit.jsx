@@ -2,6 +2,7 @@ import { ChartComponent, DateTime, Highlight, Inject, Legend, SeriesCollectionDi
 import moment from 'moment';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useEffect } from 'react';
 
 import { useStateContext } from '../../contexts/ContextProvider';
 import { LoadingAnimation, ErrorAnimation } from '../../components';
@@ -14,6 +15,12 @@ const IncomeProfit = ({ date, selectedCategory }) => {
     () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, { categories: selectedCategory }),
     { enabled: selectedCategory !== null }
   );
+
+  useEffect(() => {
+    if (selectedCategory) {
+      refetch();
+    }
+  }, [selectedCategory, refetch]);
 
   if (isLoading) return <LoadingAnimation />;
 
