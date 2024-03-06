@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useStateContext } from '../../contexts/ContextProvider';
 import { ErrorAnimation, LoadingAnimation } from '../../components';
 
-const ForecastingChart = ({ id, category, label, title, header }) => {
+const ForecastingChart = ({ id, category }) => {
   const { currentMode } = useStateContext();
 
   const payload = [
@@ -120,13 +120,13 @@ const ForecastingChart = ({ id, category, label, title, header }) => {
     };
     
     const linePrimaryYAxis = {
-      labelFormat: label,
+      labelFormat: category === 'total' ? 'Rp {value}' : '{value}',
       lineStyle: { width: 0 },
       majorTickLines: { width: 0 },
       minorTickLines: { width: 0 },
       majorGridLines: { dashArray: '5,5', color: currentMode === 'Dark' ? '#20232a' : '#ededed' },
       labelStyle: { color: 'gray' },
-      title: title,
+      title: category === 'total' ? 'Income' : category,
       titleStyle: { color: currentMode === 'Dark' ? '#fff' : '#33373E' },
     };
 
@@ -159,7 +159,7 @@ const ForecastingChart = ({ id, category, label, title, header }) => {
         <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
           <div className='p-4'>
             <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-              {header}
+              {category === 'total' ? 'Total' : category}
             </div>
             <div className='w-full'>
               <ChartComponent
