@@ -159,7 +159,7 @@ const ForecastingChart = ({ id, category }) => {
         <div className='bg-white rounded-2xl shadow dark:bg-secondary-dark-bg'>
           <div className='p-4'>
             <div className='text-xl font-semibold text-[#344767] mb-4 dark:text-gray-300'>
-              {category === 'total' ? 'Total' : category}
+              {category === 'total' ? 'Income' : category}
             </div>
             <div className='w-full'>
               <ChartComponent
