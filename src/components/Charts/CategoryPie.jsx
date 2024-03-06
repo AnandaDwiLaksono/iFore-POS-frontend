@@ -1,10 +1,10 @@
 import { AccumulationChartComponent, AccumulationDataLabel, AccumulationLegend, AccumulationSeriesCollectionDirective, AccumulationSeriesDirective, AccumulationTooltip, Inject, PieSeries } from '@syncfusion/ej2-react-charts'
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 import { useStateContext } from '../../contexts/ContextProvider';
 import { LoadingAnimation, ErrorAnimation } from '../../components';
-import { useEffect } from 'react';
 
 const CategoryPie = ({ selectedDate }) => {
   const { currentMode } = useStateContext();
