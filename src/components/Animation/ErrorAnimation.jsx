@@ -4,7 +4,7 @@ import error from "../../assets/json/error.json"
 
 const ErrorAnimation = () => {
   return (
-    <div className="grid place-items-center h-screen mx-auto border">
+    <div className="grid place-items-center mx-auto border">
       <Player
         autoplay
         speed={1.5}

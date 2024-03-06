@@ -4,7 +4,7 @@ import loader from "../../assets/json/loading.json"
 
 const LoadingAnimation = () => {
   return (
-    <div className="grid place-items-center h-screen mx-auto border">
+    <div className="grid place-items-center mx-auto border">
       <Player
         autoplay
         speed={1.5}
