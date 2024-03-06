@@ -38,7 +38,7 @@ const Card = ({ title, value, percentage, icon, selectedDate }) => {
                 {title}
               </p>
               <span className='text-[#344767] text-xl font-bold dark:text-white'>
-                {value === ('incomeTotal' || 'profitTotal') && 'Rp'} {(dataCard[value]).toLocaleString('id-ID')}
+                {(value === 'incomeTotal' || value === 'profitTotal') && 'Rp'} {(dataCard[value]).toLocaleString('id-ID')}
               </span>
               {percentage !== undefined && (
                 <span className={dataCard[percentage].startsWith('-') ? 'text-[#ea0606] text-sm font-bold ml-1' : 'text-[#82d616] text-sm font-bold ml-1'}>
