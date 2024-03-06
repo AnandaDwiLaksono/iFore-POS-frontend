@@ -257,6 +257,12 @@ const Dashboard = () => {
       </div>
       <div className='flex flex-wrap -ml-6 -mt-6 w-[calc(100%+24px)] justify-center'>
         <ForecastingChart id='income-chart' category='total' label='RP {value}' title='Income' header='Income' />
+        <ForecastingChart id='freebase-chart' category='Freebase' label='RP {value}' title='Freebase' header='Freebase' />
+        <ForecastingChart id='saltnic-chart' category='Saltnic' label='RP {value}' title='Saltnic' header='Saltnic' />
+        <ForecastingChart id='pod-chart' category='Pod' label='RP {value}' title='Pod' header='Pod' />
+        <ForecastingChart id='mod-chart' category='Mod' label='RP {value}' title='Mod' header='Mod' />
+        <ForecastingChart id='coil-chart' category='Coil' label='RP {value}' title='Coil' header='Coil' />
+        <ForecastingChart id='accessories-chart' category='Accessories' label='RP {value}' title='Accessories' header='Accessories' />
         {/* <ForecastingChart id='freebase-chart' data={[actualDatas.find(item => item.category === 'Freebase').data, predictionDatas.find(item => item.category === 'Freebase').data]} label='{value}' header='Freebase' />
         <ForecastingChart id='saltnic-chart' data={[actualDatas.find(item => item.category === 'Saltnic').data, predictionDatas.find(item => item.category === 'Saltnic').data]} label='{value}' header='Saltnic' />
         <ForecastingChart id='pod-chart' data={[actualDatas.find(item => item.category === 'Pod').data, predictionDatas.find(item => item.category === 'Pod').data]} label='{value}' header='Pod' />
