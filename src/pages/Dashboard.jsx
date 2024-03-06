@@ -246,7 +246,7 @@ const Dashboard = () => {
                 Sales by Category
               </div>
               <div className='w-full'>
-                {/* <CategoryPie data={categoryData} /> */}
+                <CategoryPie selectedDate={selectedDate} />
               </div>
             </div>
           </div>
