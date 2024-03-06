@@ -1,129 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaMoneyBillWaveAlt, FaWallet } from 'react-icons/fa';
 import { BiCategory, BiFilterAlt } from 'react-icons/bi';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
-import { useStateContext } from '../contexts/ContextProvider';
-import { Card, CategoryPie, ErrorAnimation, ForecastingChart, IncomeProfit, LoadingAnimation } from '../components';
+import { Card, CategoryPie, ForecastingChart, IncomeProfit } from '../components';
 
 const Dashboard = () => {
-  // const { numberFormat } = useStateContext();
 
   const [selectedDate, setSelectedDate] = useState([new Date(), new Date()]);
   const [selectedCategory, setSelectedCategory] = useState([]);
-  // const [predictionDatas, setPredictionDatas] = useState([]);
-  // const [actualDatas, setActualDatas] = useState([]);
-
-  // const { data: dataCard, isLoading: cardLoading, isError: cardError, refetch: refetchCard } = useQuery(
-  //   ['card', selectedDate],
-  //   () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/card`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
-  //   { enabled: selectedDate !== null }
-  // );
-  
-  // const { data: dataIncomeProfit, isLoading: incomeProfitLoading, isError: incomeProfitError, refetch: refetchIncomeProfit } = useQuery(
-  //   ['incomeProfit', selectedCategory],
-  //   () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/income-profit`, { categories: selectedCategory }),
-  //   { enabled: selectedCategory !== null }
-  // );
-  
-  // const { data: dataCategory, isLoading: categoryLoading, isError: categoryError, refetch: refetchCategory } = useQuery(
-  //   ['category', selectedDate],
-  //   () => axios.post(`${process.env.REACT_APP_API_URL}/api/dashboard/category`, { startDate: selectedDate[0], endDate: selectedDate[1] }),
-  //   { enabled: selectedDate !== null }
-  // );
-
-  // const dataPredictions = useMutation({
-  //   mutationFn: async (data) => {
-  //     const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/model-forecasting`, data);
-      
-  //     return [response.data, data.category];
-  //   },
-  //   onSuccess: (data) => {
-  //     setPredictionDatas(prev => [...prev, { category: data[1], data: data[0].prediction }]);
-  //     setActualDatas(prev => [...prev, { category: data[1], data: data[0].dataActual }]);
-  //   },
-  //   onError: (error) => {
-  //     console.log(error);
-  //     dataPredictions.mutate(error.config.data);
-  //   },
-  // });
-  
-  // const payload = [
-  //   {
-  //     category: 'total',
-  //     parameter: {
-  //       seed: 0,
-  //       maxFeatures: 0,
-  //       replacement: true,
-  //       nEstimators: 25,
-  //       selectionMethod: 'median'
-  //     }
-  //   },
-  //   {
-  //     category: 'Freebase',
-  //     parameter: {
-  //       seed: 0,
-  //       maxFeatures: 0,
-  //       replacement: false,
-  //       nEstimators: 266,
-  //       selectionMethod: 'median'
-  //     }
-  //   },
-  //   {
-  //     category: 'Saltnic',
-  //     parameter: {
-  //       seed: 0,
-  //       maxFeatures: 5,
-  //       replacement: true,
-  //       nEstimators: 42,
-  //       selectionMethod: 'median'
-  //     }
-  //   },
-  //   {
-  //     category: 'Pod',
-  //     parameter: {
-  //       seed: 1,
-  //       maxFeatures: 4,
-  //       replacement: false,
-  //       nEstimators: 103,
-  //       selectionMethod: 'median'
-  //     }
-  //   },
-  //   {
-  //     category: 'Mod',
-  //     parameter: {
-  //       seed: 0,
-  //       maxFeatures: 6,
-  //       replacement: false,
-  //       nEstimators: 15,
-  //       selectionMethod: 'mean'
-  //     }
-  //   },
-  //   {
-  //     category: 'Coil',
-  //     parameter: {
-  //       seed: 0,
-  //       maxFeatures: 5,
-  //       replacement: false,
-  //       nEstimators: 57,
-  //       selectionMethod: 'median'
-  //     }
-  //   },
-  //   {
-  //     category: 'Accessories',
-  //     parameter: {
-  //       seed: 0,
-  //       maxFeatures: 3,
-  //       replacement: false,
-  //       nEstimators: 217,
-  //       selectionMethod: 'median'
-  //     }
-  //   }
-  // ]
 
   const formattedDate = useCallback((date) => {
     const newDate = new Date(date);
@@ -135,35 +22,6 @@ const Dashboard = () => {
     return `${year}-${month}-${day}`;
   }, []);
 
-  // useEffect(() => {
-  //   if (selectedDate) {
-  //     // refetchCard();
-  //     refetchCategory();
-  //   }
-  
-  //   if (selectedCategory) {
-  //     refetchIncomeProfit();
-  //   }
-    
-  //   for (let i = 0; i < payload.length; i++) {
-  //     dataPredictions.mutate(payload[i]);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedDate, selectedCategory, refetchCategory, refetchIncomeProfit]);
-
-  // if (incomeProfitLoading || categoryLoading || predictionDatas.length !== payload.length) return (<LoadingAnimation />);
-
-  // if (incomeProfitError || categoryError) return (<ErrorAnimation />);
-
-  // if (dataIncomeProfit && dataCategory && predictionDatas.length === payload.length) {
-  //   // const cardData = dataCard.data.data;
-  //   const incomeProfitData = dataIncomeProfit.data.data;
-  //   const categoryData = dataCategory.data.data;
-
-  //   console.log(predictionDatas);
-  //   console.log(actualDatas);
-
-  //   const categories = categoryData.map(item => item.name);
   const categories = ['Freebase', 'Saltnic', 'Pod', 'Mod', 'Coil', 'Accessories'];
 
   return (
@@ -230,8 +88,6 @@ const Dashboard = () => {
               </div>
               <div className='w-full'>
                 <IncomeProfit
-                  // dataIncome={incomeProfitData.dataIncome}
-                  // dataProfit={incomeProfitData.dataProfit}
                   date={[formattedDate(selectedDate[0]), formattedDate(selectedDate[1]), formattedDate(new Date())]}
                   selectedCategory={selectedCategory}
                 />
@@ -263,16 +119,9 @@ const Dashboard = () => {
         <ForecastingChart id='mod-chart' category='Mod' label='RP {value}' title='Mod' header='Mod' />
         <ForecastingChart id='coil-chart' category='Coil' label='RP {value}' title='Coil' header='Coil' />
         <ForecastingChart id='accessories-chart' category='Accessories' label='RP {value}' title='Accessories' header='Accessories' />
-        {/* <ForecastingChart id='freebase-chart' data={[actualDatas.find(item => item.category === 'Freebase').data, predictionDatas.find(item => item.category === 'Freebase').data]} label='{value}' header='Freebase' />
-        <ForecastingChart id='saltnic-chart' data={[actualDatas.find(item => item.category === 'Saltnic').data, predictionDatas.find(item => item.category === 'Saltnic').data]} label='{value}' header='Saltnic' />
-        <ForecastingChart id='pod-chart' data={[actualDatas.find(item => item.category === 'Pod').data, predictionDatas.find(item => item.category === 'Pod').data]} label='{value}' header='Pod' />
-        <ForecastingChart id='mod-chart' data={[actualDatas.find(item => item.category === 'Mod').data, predictionDatas.find(item => item.category === 'Mod').data]} label='{value}' header='Mod' />
-        <ForecastingChart id='coil-chart' data={[actualDatas.find(item => item.category === 'Coil').data, predictionDatas.find(item => item.category === 'Coil').data]} label='{value}' header='Coil' />
-        <ForecastingChart id='accessories-chart' data={[actualDatas.find(item => item.category === 'Accessories').data, predictionDatas.find(item => item.category === 'Accessories').data]} label='{value}' header='Accessories' /> */}
       </div>
     </div>
   );
-  // };
 };
 
 export default Dashboard;
