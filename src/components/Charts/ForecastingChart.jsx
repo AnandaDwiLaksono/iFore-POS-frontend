@@ -75,7 +75,7 @@ const ForecastingChart = ({ id, category }) => {
         seed: 0,
         maxFeatures: 3,
         replacement: false,
-        nEstimators: 217,
+        nEstimators: 224,
         selectionMethod: 'median'
       }
     }
