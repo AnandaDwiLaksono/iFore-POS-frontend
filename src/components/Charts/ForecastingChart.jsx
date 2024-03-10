@@ -13,9 +13,9 @@ const ForecastingChart = ({ id, category }) => {
       category: 'total',
       parameter: {
         seed: 0,
-        maxFeatures: 0,
+        maxFeatures: 5,
         replacement: true,
-        nEstimators: 25,
+        nEstimators: 48,
         selectionMethod: 'median'
       }
     },
@@ -25,7 +25,7 @@ const ForecastingChart = ({ id, category }) => {
         seed: 0,
         maxFeatures: 0,
         replacement: false,
-        nEstimators: 266,
+        nEstimators: 330,
         selectionMethod: 'median'
       }
     },
@@ -35,7 +35,7 @@ const ForecastingChart = ({ id, category }) => {
         seed: 0,
         maxFeatures: 5,
         replacement: true,
-        nEstimators: 42,
+        nEstimators: 71,
         selectionMethod: 'median'
       }
     },
