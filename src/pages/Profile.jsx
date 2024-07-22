@@ -188,7 +188,7 @@ const Profile = () => {
 
 	const onClickSaveHandler = async () => {
     try {
-      await editProfile.mutate(data.user);
+      await editProfile.mutate(user);
 
       if (logo) {
         await editLogo.mutate(logo);
@@ -350,7 +350,7 @@ const Profile = () => {
 									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={categories.map(category => category.name).join(', ')}
 									onChange={handleChangeCategory}
-									disabled
+									// disabled
 								/>
 							</div>
 							<label
@@ -364,7 +364,7 @@ const Profile = () => {
 									className='border-solid border-1 w-[50%] dark:text-white bg-transparent'
 									defaultValue={payments.map(payment => payment.name).join(', ')}
 									onChange={handleChangePayment}
-									disabled
+									// disabled
 								/>
 							</div>
 							<div className='p-4 text-right'>
